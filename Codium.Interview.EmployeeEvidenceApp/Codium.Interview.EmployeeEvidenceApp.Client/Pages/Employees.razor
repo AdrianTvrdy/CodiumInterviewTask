@@ -1,0 +1,54 @@
+﻿@page "/employees"
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
+@using Codium.Interview.EmployeeEvidenceApp.Client.Components.Employee
+
+<h3>Employees</h3>
+
+@if (mockEmployees == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Surname</th>
+                <th>Birth Date</th>
+                <th>Position</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var employee in mockEmployees)
+            {
+                <tr>
+                    <td>@employee.Name</td>
+                    <td>@employee.Surname</td>
+                    <td>@employee.BirthDate.ToString("yyyy/MM/dd")</td>
+                    <td>@employee.Position.PositionName</td>
+                    <td><button type="button" class="btn btn-primary btn-sm" @onclick="@(() => selectedEmployee = employee)">Details</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (selectedEmployee != null)
+{
+    <EmployeeDetail Employee="selectedEmployee" OnClose="@(() => selectedEmployee = null)" /> 
+}
+
+
+@code {
+    List<Employee> mockEmployees = new List<Employee>()
+    {
+        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 1, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
+        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 2, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan1", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
+        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 3, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan2", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
+        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 4, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan3", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
+    };
+
+    Employee selectedEmployee; // To store the selected employee for the popup
+
+}
