@@ -1,0 +1,15 @@
+﻿.btn-add {
+    top: 65px;
+    right: 60px;
+    font-size: 1rem; /* Increase font size */
+    padding: 0rem 2rem; /* Increase padding */
+    border-radius: 6px; /* Make it circular */
+    background-color: #1b6ec2;
+    border-color: #1b6ec2;
+    color: white;
+}
+
+
+.employee-table {
+    margin-bottom: 40px; /* Add 40px spacing below the table */
+}
