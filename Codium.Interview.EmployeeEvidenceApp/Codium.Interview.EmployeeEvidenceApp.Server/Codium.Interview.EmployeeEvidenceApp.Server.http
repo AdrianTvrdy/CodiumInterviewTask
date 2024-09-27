@@ -1,0 +1,6 @@
+@Codium.Interview.EmployeeEvidenceApp.Server_HostAddress = http://localhost:5240
+
+GET {{Codium.Interview.EmployeeEvidenceApp.Server_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
