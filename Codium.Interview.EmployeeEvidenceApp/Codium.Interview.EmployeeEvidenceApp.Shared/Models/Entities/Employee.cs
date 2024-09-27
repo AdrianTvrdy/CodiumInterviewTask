@@ -14,7 +14,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
         public required string Name { get; set; }
         public required string Surname { get; set; }
 
-
+        public required DateTime BirthDate { get; set; }
         public required Position Position { get; set; }
         public required string IPaddress { get; set; }
         public required string IPCountryCode { get; set; }
