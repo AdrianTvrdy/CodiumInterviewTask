@@ -1,5 +1,47 @@
-﻿<h3>AddEmployeeForm</h3>
+﻿@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
+
+<form>
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input type="text" id="name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="surname">Surname:</label>
+        <input type="text" id="surname" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="birthdate">Birth Date:</label>
+        <input type="date" id="birthdate" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label for="position">Position:</label>
+        <select id="position" class="form-control">
+            @foreach (var position in positions)
+            {
+                <option value="@position.PositionID">@position.PositionName</option>
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="ip">IP address:</label>
+        <input type="text" id="ip" class="form-control" />
+    </div>
+
+
+
+    <button type="submit" class="btn btn-add">Add Employee</button>
+</form>
 
 @code {
+    private List<Position> positions = new List<Position>()
+    {
+        new Position { PositionID = 1, PositionName = "Developer" },
+        new Position { PositionID = 2, PositionName = "Manager" },
+        new Position { PositionID = 3, PositionName = "Designer" }
+    };
 
 }
