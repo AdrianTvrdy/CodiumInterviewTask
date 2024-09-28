@@ -1,5 +1,7 @@
-﻿@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
-
+﻿@using Codium.Interview.EmployeeEvidenceApp.Client.Services
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
+@inject IPositionService positionService
 <form>
     <div class="form-group">
         <label for="name">Name:</label>
@@ -19,10 +21,18 @@
     <div class="form-group">
         <label for="position">Position:</label>
         <select id="position" class="form-control">
-            @foreach (var position in positions)
+            @if (positions is null)
             {
-                <option value="@position.PositionID">@position.PositionName</option>
+                <option>Loading...</option>
             }
+            else
+            {
+                @foreach (var position in positions)
+                {
+                    <option value="@position.PositionID">@position.PositionName</option>
+                }
+            }
+            
         </select>
     </div>
 
@@ -37,11 +47,12 @@
 </form>
 
 @code {
-    private List<Position> positions = new List<Position>()
+    private IEnumerable<PositionDTO> positions;
+
+    protected override async Task OnInitializedAsync()
     {
-        new Position { PositionID = 1, PositionName = "Developer" },
-        new Position { PositionID = 2, PositionName = "Manager" },
-        new Position { PositionID = 3, PositionName = "Designer" }
-    };
+        positions = await positionService.GetAllPositions();
+    }
+
 
 }

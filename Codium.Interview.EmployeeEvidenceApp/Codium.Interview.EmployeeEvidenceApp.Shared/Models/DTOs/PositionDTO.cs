@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
 {
-    internal class Class1
+    public class PositionDTO
     {
+        public int PositionID { get; set; }
+        public required string PositionName { get; set; }
+
     }
 }

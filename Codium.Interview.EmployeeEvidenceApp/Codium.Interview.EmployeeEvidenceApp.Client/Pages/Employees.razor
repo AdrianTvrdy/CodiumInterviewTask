@@ -1,6 +1,10 @@
 ﻿@page "/employees"
+@using Codium.Interview.EmployeeEvidenceApp.Client.Services
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
 @using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
 @using Codium.Interview.EmployeeEvidenceApp.Client.Components.Employee
+@inject IEmployeeService employeeService
+
 
 <div style="display: flex; align-items: center;">
     <h3>Employees</h3>
@@ -10,7 +14,7 @@
 
 </div>
 <div>
-    @if (mockEmployees == null)
+    @if (employees == null)
     {
         <p><em>Loading...</em></p>
     }
@@ -27,7 +31,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var employee in mockEmployees)
+                @foreach (var employee in employees)
                 {
                     <tr>
                         <td @onclick="@(() => selectedEmployee = employee)">@employee.Name </td>
@@ -49,7 +53,7 @@
 
 @if (selectedEmployee is not null)
 {
-    <EmployeeDetail Employee="selectedEmployee" OnClose="@(() => selectedEmployee = null)" /> 
+    <EmployeeDetail Employee="selectedEmployee" OnClose="@(() => selectedEmployee = null)" />
 }
 @if (showNewEmployeeComponent)
 {
@@ -58,39 +62,15 @@
 
 
 @code {
-    List<Employee> mockEmployees = new List<Employee>()
-    {
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 1, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 2, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan1", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 3, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan2", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 4, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan3", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 1, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 2, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan1", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 3, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan2", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 4, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan3", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 1, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 2, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan1", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 3, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan2", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 4, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan3", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 1, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 2, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan1", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 3, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan2", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 4, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan3", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 1, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 2, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan1", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 3, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan2", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 4, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan3", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 1, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 2, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan1", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 3, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan2", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 4, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan3", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 1, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 2, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan1", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 3, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan2", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-        new Employee() { BirthDate = DateTime.UtcNow, EployeeID = 4, IPaddress = "127.0.0.1", IPCountryCode = "SK", Name = "Jan3", Surname = "Maly", Position = new Position() { PositionID = 1, PositionName = "Developer"} },
-    };
-
-    Employee selectedEmployee; // To store the selected employee for the popup
+    List<EmployeeDTO> employees;
+    EmployeeDTO selectedEmployee;
     bool showNewEmployeeComponent = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        employees = await employeeService.GetAllEmployees();
+    }
+
+
 
 }
