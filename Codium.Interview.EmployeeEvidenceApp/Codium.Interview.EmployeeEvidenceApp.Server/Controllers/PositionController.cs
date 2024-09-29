@@ -23,5 +23,12 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
             return Ok(await _positionService.GetAllPositions());
         }
 
+        [HttpGet("Position/{id}")]
+        public async Task<ActionResult<PositionDTO>> GetPositionById(int id)
+        {
+            return Ok(await _positionService.GetPositionByIdAsync(id));
+        }
+
+
     }
 }

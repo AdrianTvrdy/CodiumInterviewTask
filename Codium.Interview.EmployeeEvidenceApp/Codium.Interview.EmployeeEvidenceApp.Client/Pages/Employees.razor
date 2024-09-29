@@ -26,7 +26,6 @@
                     <th>Name</th>
                     <th>Surname</th>
                     <th>Birth Date</th>
-                    <th>Position</th>
                     <th></th>
                 </tr>
             </thead>
@@ -34,10 +33,10 @@
                 @foreach (var employee in employees)
                 {
                     <tr>
-                        <td @onclick="@(() => selectedEmployee = employee)">@employee.Name </td>
-                        <td @onclick="@(() => selectedEmployee = employee)">@employee.Surname</td>
+                        <td @onclick="@(() => selectedEmployeeID = employee.EployeeID)">@employee.Name </td>
+                        <td @onclick="@(() => selectedEmployeeID = employee.EployeeID)">@employee.Surname</td>
                         <td>@employee.BirthDate.ToString("yyyy/MM/dd")</td>
-                        <td><button type="button" class="btn btn-primary btn-sm" @onclick="@(() => selectedEmployee = employee)">Details</button></td>
+                        <td><button type="button" class="btn btn-primary btn-sm" @onclick="@(() => selectedEmployeeID = employee.EployeeID)">Details</button></td>
                     </tr>
                 }
             </tbody>
@@ -50,25 +49,28 @@
 
 
 
-@if (selectedEmployee is not null)
+@if (selectedEmployeeID is not null)
 {
-    <EmployeeDetail Employee="selectedEmployee" OnClose="@(() => selectedEmployee = null)" />
+    <EmployeeDetail EmployeeID="selectedEmployeeID" OnClose="@(() => selectedEmployeeID = null)" />
 }
-@if (showNewEmployeeComponent)
-{
-    <AddEmployeeForm OnClose="@(() => showNewEmployeeComponent = false)"></AddEmployeeForm>
-}
+
 
 
 @code {
-    List<EmployeeDTO> employees;
-    EmployeeDTO selectedEmployee;
-    bool showNewEmployeeComponent = false;
+    List<EmployeeListDTO> employees;
+    int? selectedEmployeeID;
+
+
+
 
     protected override async Task OnInitializedAsync()
     {
         employees = await employeeService.GetAllEmployees();
     }
+
+
+
+
 
 
 

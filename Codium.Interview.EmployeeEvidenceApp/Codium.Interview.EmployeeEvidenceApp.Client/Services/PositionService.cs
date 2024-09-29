@@ -16,6 +16,10 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Services
         {
             return await _positionRepository.GetAllPositions();
         }
-        
+
+        public async Task<PositionDTO> GetPositionByIdAsync(int id)
+        {
+            return await _positionRepository.GetPositionByIdAsync(id);
+        }
     }
 }

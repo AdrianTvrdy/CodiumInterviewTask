@@ -1,4 +1,5 @@
 ﻿using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
@@ -15,7 +16,17 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
 
         public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PostAsJsonAsync("/api/Employee/AddEmployee", entity);
+            response.EnsureSuccessStatusCode(); // Check for HTTP errors
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            var result = JsonSerializer.Deserialize<EmployeeDTO>(responseContent, options);
+            return result;
         }
 
         public async Task DeleteEmployeeAsync(EmployeeDTO entity)
@@ -23,7 +34,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
             throw new NotImplementedException();
         }
 
-        public async Task<List<EmployeeDTO>> GetAllEmployees()
+        public async Task<List<EmployeeListDTO>> GetAllEmployees()
         {
             var response = await _httpClient.GetAsync("/api/Employee/Employees");
             response.EnsureSuccessStatusCode(); // Check for HTTP errors
@@ -34,13 +45,23 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
 
-            var result = JsonSerializer.Deserialize<List<EmployeeDTO>>(responseContent, options);
-            return result ?? new List<EmployeeDTO>();
+            var result = JsonSerializer.Deserialize<List<EmployeeListDTO>>(responseContent, options);
+            return result ?? new List<EmployeeListDTO>();
 
         }
         public async Task<EmployeeDTO> GetEmployeeByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.GetAsync($"/api/Employee/Employee/{id}");
+            response.EnsureSuccessStatusCode(); // Check for HTTP errors
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            var result = JsonSerializer.Deserialize<EmployeeDTO>(responseContent, options);
+            return result;
         }
 
         public async Task UpdateEmployeeAsync(EmployeeDTO entity)

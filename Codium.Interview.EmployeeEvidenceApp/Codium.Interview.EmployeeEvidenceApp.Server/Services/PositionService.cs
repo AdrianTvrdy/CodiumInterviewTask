@@ -9,7 +9,7 @@ using System.Runtime.CompilerServices;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 {
-    public class PositionService : IPositionService 
+    public class PositionService : IPositionService
     {
         private readonly IPositionRepository _positionRepository;
 
@@ -24,6 +24,9 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
             return await _positionRepository.GetAllPositions();
         }
 
-
+        public async Task<PositionDTO> GetPositionByIdAsync(int id)
+        {
+            return await _positionRepository.GetPositionByIdAsync(id);
+        }
     }
 }

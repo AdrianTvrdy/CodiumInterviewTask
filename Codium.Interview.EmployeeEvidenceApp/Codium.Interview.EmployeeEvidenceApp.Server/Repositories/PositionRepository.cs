@@ -35,7 +35,8 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Repositories
 
         public async Task<PositionDTO> GetPositionByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var position = await _dbContext.Positions.FirstOrDefaultAsync(e => e.PositionID == id);
+            return _mapper.Map<PositionDTO>(position);
         }
 
         public async Task UpdatePositionAsync(PositionDTO entity)

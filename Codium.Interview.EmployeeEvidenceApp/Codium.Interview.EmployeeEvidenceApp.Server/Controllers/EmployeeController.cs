@@ -16,11 +16,31 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
         }
 
         [HttpGet("Employees")]
-        public async Task<ActionResult<List<EmployeeDTO>>> GetEmployees()
+        public async Task<ActionResult<List<EmployeeListDTO>>> GetEmployees()
         {
             // errors
             return Ok(await _employeeService.GetAllEmployees());
         }
+
+        [HttpGet("Employee/{id}")]
+        public async Task<ActionResult<EmployeeDTO>> GetEmployeeById(int id)
+        {
+            return Ok(await _employeeService.GetEmployeeByIdAsync(id));
+        }
+
+        [HttpPost("AddEmployee")]
+        public async Task<ActionResult<EmployeeDTO>> AddEmployee(EmployeeDTO employee)
+        {
+            var result = await _employeeService.AddEmployeeAsync(employee);
+            if (result == null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(result);
+        }
+
+
 
     }
 }

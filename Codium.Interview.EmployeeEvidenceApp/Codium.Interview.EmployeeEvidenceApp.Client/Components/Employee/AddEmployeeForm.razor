@@ -68,6 +68,10 @@
     protected async Task HandleValidSubmit()
     {
         // await EmployeeService.CreateEmployeeAsync(employee);
+        employee.IPCountryCode = string.Empty;
+        await employeeService.AddEmployeeAsync(employee);
+
+
         NavigationManager.NavigateTo("/employees");
     }
 }

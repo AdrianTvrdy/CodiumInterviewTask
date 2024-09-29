@@ -43,7 +43,17 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
 
         public async Task<PositionDTO> GetPositionByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.GetAsync($"/api/Position/Position/{id}");
+            response.EnsureSuccessStatusCode(); // Check for HTTP errors
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            var result = JsonSerializer.Deserialize<PositionDTO>(responseContent, options);
+            return result ?? new PositionDTO();
         }
 
         public async Task UpdatePositionAsync(PositionDTO entity)

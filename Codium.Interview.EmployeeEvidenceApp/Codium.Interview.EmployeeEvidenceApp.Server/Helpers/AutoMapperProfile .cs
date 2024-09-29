@@ -8,6 +8,15 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Helpers
     {
         public AutoMapperProfile()
         {
+            CreateMap<Position, PositionDTO>()
+                .ForMember(dest => dest.PositionID, opt => opt.MapFrom(src => src.PositionID))
+                .ForMember(dest => dest.PositionName, opt => opt.MapFrom(src => src.PositionName));
+
+            CreateMap<PositionDTO, Position>()
+                .ForMember(dest => dest.PositionID, opt => opt.MapFrom(src => src.PositionID))
+                .ForMember(dest => dest.PositionName, opt => opt.MapFrom(src => src.PositionName));
+
+
             CreateMap<Employee, EmployeeDTO>()
                 .ForMember(dest => dest.EployeeID, opt => opt.MapFrom(src => src.EployeeID))
                 .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
@@ -15,7 +24,8 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Helpers
                 .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
                 .ForMember(dest => dest.IPCountryCode, opt => opt.MapFrom(src => src.IPCountryCode))
                 .ForMember(dest => dest.IPaddress, opt => opt.MapFrom(src => src.IPaddress))
-                .ForMember(dest => dest.PositionID, opt => opt.MapFrom(src => src.Position.PositionID));
+                .ForMember(dest => dest.PositionID, opt => opt.MapFrom(src => src.PositionID));
+
 
             CreateMap<EmployeeDTO, Employee>()
                 .ForMember(dest => dest.EployeeID, opt => opt.MapFrom(src => src.EployeeID))
@@ -26,13 +36,19 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Helpers
                 .ForMember(dest => dest.IPaddress, opt => opt.MapFrom(src => src.IPaddress))
                 .ForMember(dest => dest.PositionID, opt => opt.MapFrom(src => src.PositionID));
 
-            CreateMap<Position, PositionDTO>()
-                .ForMember(dest => dest.PositionID, opt => opt.MapFrom(src => src.PositionID))
-                .ForMember(dest => dest.PositionName, opt => opt.MapFrom(src => src.PositionName));
+            CreateMap<Employee, EmployeeListDTO>()
+                .ForMember(dest => dest.EployeeID, opt => opt.MapFrom(src => src.EployeeID))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Surname, opt => opt.MapFrom(src => src.Surname))
+                .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate));
 
-            CreateMap<PositionDTO, Position>()
-                .ForMember(dest => dest.PositionID, opt => opt.MapFrom(src => src.PositionID))
-                .ForMember(dest => dest.PositionName, opt => opt.MapFrom(src => src.PositionName));
+            CreateMap<EmployeeListDTO, Employee>()
+                .ForMember(dest => dest.EployeeID, opt => opt.MapFrom(src => src.EployeeID))
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
+                .ForMember(dest => dest.Surname, opt => opt.MapFrom(src => src.Surname))
+                .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate));
+
+
 
         }
     }

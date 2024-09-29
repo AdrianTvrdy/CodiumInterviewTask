@@ -14,12 +14,20 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Services
             _employeeRepository = employeeRepository;
         }
 
-        public async Task<List<EmployeeDTO>> GetAllEmployees()
+        public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity)
+        {
+            return await _employeeRepository.AddEmployeeAsync(entity);
+        }
+
+        public async Task<List<EmployeeListDTO>> GetAllEmployees()
         {
             return await _employeeRepository.GetAllEmployees();
         }
 
-
+        public async Task<EmployeeDTO> GetEmployeeByIdAsync(int id)
+        {
+            return await _employeeRepository.GetEmployeeByIdAsync(id);
+        }
     }
 
 }
