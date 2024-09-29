@@ -15,7 +15,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Helpers
                 .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
                 .ForMember(dest => dest.IPCountryCode, opt => opt.MapFrom(src => src.IPCountryCode))
                 .ForMember(dest => dest.IPaddress, opt => opt.MapFrom(src => src.IPaddress))
-                .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position));
+                .ForMember(dest => dest.PositionID, opt => opt.MapFrom(src => src.Position.PositionID));
 
             CreateMap<EmployeeDTO, Employee>()
                 .ForMember(dest => dest.EployeeID, opt => opt.MapFrom(src => src.EployeeID))
@@ -24,7 +24,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Helpers
                 .ForMember(dest => dest.BirthDate, opt => opt.MapFrom(src => src.BirthDate))
                 .ForMember(dest => dest.IPCountryCode, opt => opt.MapFrom(src => src.IPCountryCode))
                 .ForMember(dest => dest.IPaddress, opt => opt.MapFrom(src => src.IPaddress))
-                .ForMember(dest => dest.Position, opt => opt.MapFrom(src => src.Position));
+                .ForMember(dest => dest.PositionID, opt => opt.MapFrom(src => src.PositionID));
 
             CreateMap<Position, PositionDTO>()
                 .ForMember(dest => dest.PositionID, opt => opt.MapFrom(src => src.PositionID))

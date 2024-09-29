@@ -37,7 +37,6 @@
                         <td @onclick="@(() => selectedEmployee = employee)">@employee.Name </td>
                         <td @onclick="@(() => selectedEmployee = employee)">@employee.Surname</td>
                         <td>@employee.BirthDate.ToString("yyyy/MM/dd")</td>
-                        <td>@employee.Position.PositionName</td>
                         <td><button type="button" class="btn btn-primary btn-sm" @onclick="@(() => selectedEmployee = employee)">Details</button></td>
                     </tr>
                 }

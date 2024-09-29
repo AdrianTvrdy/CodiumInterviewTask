@@ -30,7 +30,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Repositories
 
         public async Task<List<EmployeeDTO>> GetAllEmployees()
         {
-            var employees = await _dbContext.Employees.Include(e => e.Position).ToListAsync();
+            var employees = await _dbContext.Employees.ToListAsync();
             return _mapper.Map<List<EmployeeDTO>>(employees);
         }
 

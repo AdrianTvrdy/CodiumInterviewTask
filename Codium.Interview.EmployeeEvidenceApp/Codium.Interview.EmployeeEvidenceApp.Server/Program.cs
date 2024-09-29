@@ -5,6 +5,7 @@ using Codium.Interview.EmployeeEvidenceApp.Server.Repositories;
 using Codium.Interview.EmployeeEvidenceApp.Server.Services;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Server
@@ -23,6 +24,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server
             builder.Services.AddScoped<IPositionService, PositionService>();
 
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

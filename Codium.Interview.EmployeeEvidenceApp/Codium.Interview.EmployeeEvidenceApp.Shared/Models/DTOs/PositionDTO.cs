@@ -9,7 +9,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
     public class PositionDTO
     {
         public int PositionID { get; set; }
-        public required string PositionName { get; set; }
+        public string PositionName { get; set; }
 
     }
 }

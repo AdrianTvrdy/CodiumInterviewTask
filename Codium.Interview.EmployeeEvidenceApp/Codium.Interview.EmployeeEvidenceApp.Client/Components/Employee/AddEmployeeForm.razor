@@ -2,57 +2,72 @@
 @using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
 @using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
 @inject IPositionService positionService
-<form>
-    <div class="form-group">
+@inject IEmployeeService employeeService
+@inject NavigationManager NavigationManager
+
+
+<EditForm Model="@employee" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator /> 
+    <ValidationSummary /> 
+
+    <div   
+ class="form-group">
         <label for="name">Name:</label>
-        <input type="text" id="name" class="form-control" />
+        <InputText id="name" class="form-control" @bind-Value="employee.Name"   
+ required />
     </div>
 
     <div class="form-group">
         <label for="surname">Surname:</label>
-        <input type="text" id="surname" class="form-control" />
+        <InputText id="surname" class="form-control" @bind-Value="employee.Surname" required />
     </div>
 
     <div class="form-group">
         <label for="birthdate">Birth Date:</label>
-        <input type="date" id="birthdate" class="form-control" />
+        <InputDate id="birthdate" class="form-control" @bind-Value="employee.BirthDate" required />
     </div>
 
     <div class="form-group">
         <label for="position">Position:</label>
-        <select id="position" class="form-control">
-            @if (positions is null)
+        <select id="position" class="form-control" @bind="employee.PositionID" required> 
+            @if (positions == null)
             {
-                <option>Loading...</option>
+                <option value="">Loading...</option> 
             }
             else
             {
+                <option value="">Select a position</option> 
                 @foreach (var position in positions)
                 {
-                    <option value="@position.PositionID">@position.PositionName</option>
+                    <option value="@position.PositionID">@position.PositionName</option>   
+
                 }
             }
-            
         </select>
     </div>
 
     <div class="form-group">
         <label for="ip">IP address:</label>
-        <input type="text" id="ip" class="form-control" />
+        <InputText id="ip" class="form-control" @bind-Value="employee.IPaddress" required />
     </div>
 
-
-
     <button type="submit" class="btn btn-add">Add Employee</button>
-</form>
+</EditForm>
+
 
 @code {
-    private IEnumerable<PositionDTO> positions;
+    private List<PositionDTO> positions;
+    private EmployeeDTO employee = new EmployeeDTO() { BirthDate = DateTime.Today };
+
 
     protected override async Task OnInitializedAsync()
     {
         positions = await positionService.GetAllPositions();
     }
 
-
+    protected async Task HandleValidSubmit()
+    {
+        // await EmployeeService.CreateEmployeeAsync(employee);
+        NavigationManager.NavigateTo("/employees");
+    }
 }

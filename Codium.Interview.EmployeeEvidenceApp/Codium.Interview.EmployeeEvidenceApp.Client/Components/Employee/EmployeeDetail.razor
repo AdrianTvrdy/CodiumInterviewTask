@@ -1,5 +1,7 @@
-﻿@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
+﻿@using Codium.Interview.EmployeeEvidenceApp.Client.Services
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
 @using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
+@inject IPositionService positionService
 
 <div class="modal fade show d-block" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -14,7 +16,7 @@
                 <p>Name: @Employee.Name</p>
                 <p>Surname: @Employee.Surname</p>
                 <p>Birth Date: @Employee.BirthDate.ToString("yyyy/MM/dd")</p>
-                <p>Position: @Employee.Position.PositionName</p>
+
                 <p>IP Address: @Employee.IPaddress</p>
                 <p>IP Country Code: @Employee.IPCountryCode</p>
             </div>
@@ -28,4 +30,11 @@
 @code {
     [Parameter] public EmployeeDTO Employee { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
+    
+    protected override void OnInitialized()
+    {
+        // get by id from employeeService
+        // positionService. 
+    }
+
 }
