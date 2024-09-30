@@ -7,5 +7,8 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Services
         Task<List<EmployeeListDTO>> GetAllEmployees();
         Task<EmployeeDTO> GetEmployeeByIdAsync(int id);
         Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity);
+        Task DeleteEmployeeAsync(int id);
+        Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity);
+
     }
 }

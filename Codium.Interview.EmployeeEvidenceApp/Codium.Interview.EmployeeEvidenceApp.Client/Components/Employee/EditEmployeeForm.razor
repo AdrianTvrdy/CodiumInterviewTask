@@ -1,5 +1,82 @@
-﻿<h3>EditEmployeeForm</h3>
+﻿@using Codium.Interview.EmployeeEvidenceApp.Client.Services
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
+@inject IPositionService positionService
+@inject IEmployeeService EmployeeService
+@inject NavigationManager NavigationManager
+
+
+<EditForm Model="@Employee" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator /> 
+    <ValidationSummary /> 
+
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <InputText id="name" class="form-control" @bind-Value="Employee.Name" required />
+    </div>
+
+    <div class="form-group">
+        <label for="surname">Surname:</label>
+        <InputText id="surname" class="form-control" @bind-Value="Employee.Surname" required />
+    </div>
+
+    <div class="form-group">
+        <label for="birthdate">Birth Date:</label>
+        <InputDate id="birthdate" class="form-control" @bind-Value="Employee.BirthDate" required />
+    </div>
+
+    <div class="form-group">
+        <label for="position">Position:</label>
+        <select id="position" class="form-control" @bind="Employee.PositionID" required> 
+            @if (positions == null)
+            {
+                <option value="">Loading...</option> 
+            }
+            else
+            {
+                <option value="">Select a position</option> 
+                @foreach (var position in positions)
+                {
+                    <option value="@position.PositionID">@position.PositionName</option>   
+
+                }
+            }
+        </select>
+    </div>
+
+    <div class="form-group">
+        <label for="ip">IP address:</label>
+        <InputText id="ip" class="form-control" @bind-Value="Employee.IPaddress" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Edit</button>
+    <button type="button" class="btn btn-secondary" @onclick="CancelEdit">Cancel</button>
+
+</EditForm>
+
 
 @code {
-    
+    private List<PositionDTO> positions;
+    [Parameter] public EmployeeDTO Employee { get; set; }
+    [Parameter] public EventCallback<EmployeeDTO> OnEmployeeUpdated { get; set; }
+
+    [Parameter] public EventCallback OnCancel { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        positions = await positionService.GetAllPositions();
+    }
+
+    protected async Task HandleValidSubmit()
+    {
+        Employee = await EmployeeService.UpdateEmployeeAsync(Employee);
+        await OnEmployeeUpdated.InvokeAsync(Employee); // Pass the updated Employee
+        await OnCancel.InvokeAsync();
+
+    }
+
+    private async void CancelEdit()
+    {
+        await OnCancel.InvokeAsync();
+    }
 }

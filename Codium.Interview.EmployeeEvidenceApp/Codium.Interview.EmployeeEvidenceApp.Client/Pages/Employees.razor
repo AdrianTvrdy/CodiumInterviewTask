@@ -51,7 +51,7 @@
 
 @if (selectedEmployeeID is not null)
 {
-    <EmployeeDetail EmployeeID="selectedEmployeeID" OnClose="@(() => selectedEmployeeID = null)" />
+    <EmployeeDetail EmployeeID="selectedEmployeeID" OnClose="@(ResetVariables)" />
 }
 
 
@@ -70,7 +70,11 @@
 
 
 
-
+    protected async Task ResetVariables()
+    {
+        selectedEmployeeID = null;
+        employees = await employeeService.GetAllEmployees();
+    }
 
 
 

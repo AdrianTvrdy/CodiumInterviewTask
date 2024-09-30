@@ -8,10 +8,10 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
     {
 
         Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity);
-        Task DeleteEmployeeAsync(EmployeeDTO entity);
+        Task DeleteEmployeeAsync(int id);
         Task<List<EmployeeListDTO>> GetAllEmployees();
         Task<EmployeeDTO> GetEmployeeByIdAsync(int id);
-        Task UpdateEmployeeAsync(EmployeeDTO entity);
+        Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity);
         
     }
 }

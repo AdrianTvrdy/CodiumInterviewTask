@@ -29,9 +29,12 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
             return result;
         }
 
-        public async Task DeleteEmployeeAsync(EmployeeDTO entity)
+        public async Task DeleteEmployeeAsync(int id)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.DeleteAsync($"/api/Employee/DeleteEmployee/{id}");
+            response.EnsureSuccessStatusCode(); // Check for HTTP errors
+
+
         }
 
         public async Task<List<EmployeeListDTO>> GetAllEmployees()
@@ -64,9 +67,21 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
             return result;
         }
 
-        public async Task UpdateEmployeeAsync(EmployeeDTO entity)
+        public async Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity)
         {
-            throw new NotImplementedException();
+            var response = await _httpClient.PutAsJsonAsync("/api/Employee/UpdateEmployee", entity);
+            response.EnsureSuccessStatusCode(); // Check for HTTP errors
+
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            var result = JsonSerializer.Deserialize<EmployeeDTO>(responseContent, options);
+            return result;
+
+
         }
     }
 }

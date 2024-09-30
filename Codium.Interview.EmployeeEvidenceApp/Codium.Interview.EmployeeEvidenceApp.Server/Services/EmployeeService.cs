@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using Codium.Interview.EmployeeEvidenceApp.Client.Services;
 using Codium.Interview.EmployeeEvidenceApp.Server.Data;
+using Codium.Interview.EmployeeEvidenceApp.Server.Helpers;
 using Codium.Interview.EmployeeEvidenceApp.Server.Repositories;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities;
+using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -25,31 +27,27 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 
             if (count > 0)
             {
-                // exemption 
-                return null;    
+                throw new EmployeeExisitsException();
             }
             else
             {
-                HttpClient client = new HttpClient();
-                client.BaseAddress = new Uri("https://api.country.is/");
-                var response = await client.GetAsync(entity.IPaddress);
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    // exemption
-                    return null;
-                }
-
-                var apiCallContent = await response.Content.ReadAsStringAsync();
-                var jsonDocument = JsonDocument.Parse(apiCallContent);
-
-                // Extract the "country" property
-                string countryCode = jsonDocument.RootElement.GetProperty("country").GetString();
-
-                entity.IPCountryCode = countryCode;
+                entity.IPCountryCode = await CountryCodeApi.GetCountryCodeFromIP(entity.IPaddress);
             }
 
             return await _employeeRepository.AddEmployeeAsync(entity);
+        }
+
+        public async Task DeleteEmployeeAsync(int id)
+        {
+            EmployeeDTO employee = await _employeeRepository.GetEmployeeByIdAsync(id);
+
+            if (employee == null)
+            {
+                throw new EmployeeNotFoundException();
+            }
+
+            await _employeeRepository.DeleteEmployeeByIdAsync(id);
+
         }
 
         public async Task<List<EmployeeListDTO>> GetAllEmployees()
@@ -60,7 +58,44 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 
         public async Task<EmployeeDTO> GetEmployeeByIdAsync(int id)
         {
-            return await _employeeRepository.GetEmployeeByIdAsync(id);
+            EmployeeDTO employee = await _employeeRepository.GetEmployeeByIdAsync(id);
+
+            if (employee == null)
+            {
+                throw new EmployeeNotFoundException();
+            }
+
+            return employee;
+        }
+
+        public async Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity)
+        {
+            try
+            {
+                var entityCheck = await _employeeRepository.GetEmployeeByIdAsync(entity.EployeeID);
+
+                if (entityCheck == null)
+                {
+                    throw new EmployeeNotFoundException();
+                }
+
+
+                if (entity.IPaddress != entityCheck.IPaddress)
+                {
+                    entity.IPCountryCode = await CountryCodeApi.GetCountryCodeFromIP(entity.IPaddress);
+                }
+
+
+                return await _employeeRepository.UpdateEmployeeAsync(entity);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
         }
     }
 }

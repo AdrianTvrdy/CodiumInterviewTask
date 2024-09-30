@@ -9,7 +9,6 @@
         <div class="modal-content">
             @if (Employee != null)
             {
-
                 <div class="modal-header">
                     <h5 class="modal-title">Employee Details</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OnClose">
@@ -17,30 +16,38 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <p>Name: @Employee.Name</p>
-                    <p>Surname: @Employee.Surname</p>
-                    <p>Birth Date: @Employee.BirthDate.ToString("yyyy/MM/dd")</p>
-                    <p>Position: @Position.PositionName</p>
-                    <p>IP Address: @Employee.IPaddress</p>
-                    <p>IP Country Code: @Employee.IPCountryCode</p>
+                    @if (IsEditing)
+                    {
+                        <EditEmployeeForm Employee="Employee" OnCancel="ResetVariables" OnEmployeeUpdated="HandleEmployeeUpdated" />
+                    }
+                    else
+                    {
+                        <p>Name: @Employee.Name</p>
+                        <p>Surname: @Employee.Surname</p>
+                        <p>Birth Date: @Employee.BirthDate.ToString("yyyy/MM/dd")</p>
+                        <p>Position: @Position.PositionName</p>
+                        <p>IP Address: @Employee.IPaddress</p>
+                        <p>IP Country Code: @Employee.IPCountryCode</p>
+                    }
                 </div>
                 <div class="modal-footer">
+                    @if (!IsEditing)
+                    {
+                        <button type="button" class="btn btn-primary" @onclick="() => IsEditing = true">Edit</button>
+                        <button type="button" class="btn btn-danger" @onclick="DeleteEmployee">Delete</button>
+                    }
                     <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="OnClose">Close</button>
                 </div>
-
             }
             else
             {
-
                 <div class="modal-header">
                     <p><em>Loading...</em></p>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OnClose">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-
             }
-
         </div>
     </div>
 </div>
@@ -48,15 +55,39 @@
 @code {
     public EmployeeDTO Employee { get; set; }
     public PositionDTO Position { get; set; }
+    private bool IsEditing { get; set; } = false;
 
     [Parameter] public int? EmployeeID { get; set; }
     [Parameter] public EventCallback OnClose { get; set; }
-    
+
     protected override async Task OnInitializedAsync()
     {
         Employee = await employeeService.GetEmployeeByIdAsync((int)EmployeeID);
         Position = await positionService.GetPositionByIdAsync(Employee.PositionID);
     }
-    
 
+
+    private async Task DeleteEmployee()
+    {
+        if (Employee != null)
+        {
+            await employeeService.DeleteEmployeeAsync(Employee.EployeeID);
+            await OnClose.InvokeAsync(null);
+        }
+    }
+
+
+    private void ResetVariables()
+    {
+        IsEditing = false;
+    }
+
+    private async Task HandleEmployeeUpdated(EmployeeDTO updatedEmployee)
+    {
+
+        Position = await positionService.GetPositionByIdAsync(Employee.PositionID); ;
+
+        Employee = updatedEmployee;
+        IsEditing = false;
+    }
 }
