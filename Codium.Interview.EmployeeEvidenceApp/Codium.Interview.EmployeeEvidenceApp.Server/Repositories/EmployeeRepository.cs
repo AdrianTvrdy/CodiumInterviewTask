@@ -54,7 +54,8 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Repositories
             return _dbContext.Employees.CountAsync(x =>
                 x.Name == name &&
                 x.Surname == surename &&
-                DateTime.Compare(x.BirthDate, birthdate) == 0);
+                DateTime.Compare(x.BirthDate.Date, birthdate.Date) == 0);
+            
             // case? 
             // diacritics?
         }

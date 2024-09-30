@@ -1,4 +1,5 @@
 ﻿using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
+using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -29,8 +30,10 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
 
 
             var response = await _httpClient.GetAsync("/api/Position/Positions");
-            response.EnsureSuccessStatusCode(); // Check for HTTP errors
-
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpResponseExeption(await response.Content.ReadAsStringAsync(), response.StatusCode);
+            }
             var responseContent = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
             {
@@ -44,8 +47,10 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
         public async Task<PositionDTO> GetPositionByIdAsync(int id)
         {
             var response = await _httpClient.GetAsync($"/api/Position/Position/{id}");
-            response.EnsureSuccessStatusCode(); // Check for HTTP errors
-
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpResponseExeption(await response.Content.ReadAsStringAsync(), response.StatusCode);
+            }
             var responseContent = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
             {

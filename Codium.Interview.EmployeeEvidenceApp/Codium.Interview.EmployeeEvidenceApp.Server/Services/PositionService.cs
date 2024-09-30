@@ -20,7 +20,6 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 
         public async Task<List<PositionDTO>> GetAllPositions()
         {
-            // errors
             return await _positionRepository.GetAllPositions();
         }
 

@@ -70,8 +70,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 
         public async Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity)
         {
-            try
-            {
+
                 var entityCheck = await _employeeRepository.GetEmployeeByIdAsync(entity.EployeeID);
 
                 if (entityCheck == null)
@@ -88,12 +87,8 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 
                 return await _employeeRepository.UpdateEmployeeAsync(entity);
 
-            }
-            catch (Exception)
-            {
+            
 
-                throw;
-            }
 
 
         }

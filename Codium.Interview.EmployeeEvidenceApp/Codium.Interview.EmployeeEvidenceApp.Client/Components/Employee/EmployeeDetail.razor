@@ -1,8 +1,10 @@
 ﻿@using Codium.Interview.EmployeeEvidenceApp.Client.Services
 @using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
 @using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions
 @inject IPositionService positionService
 @inject IEmployeeService employeeService
+@inject NavigationManager NavigationManager
 
 <div class="modal fade show d-block" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
@@ -62,18 +64,37 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Employee = await employeeService.GetEmployeeByIdAsync((int)EmployeeID);
-        Position = await positionService.GetPositionByIdAsync(Employee.PositionID);
+        try
+        {
+            Employee = await employeeService.GetEmployeeByIdAsync((int)EmployeeID);
+            Position = await positionService.GetPositionByIdAsync(Employee.PositionID);
+        }
+        catch (HttpResponseExeption ex)
+        {
+
+            ErrorService.ReportError((int)ex.Status, ex.Message);
+            NavigationManager.NavigateTo("/error");
+        }
     }
 
 
     private async Task DeleteEmployee()
     {
-        if (Employee != null)
+        try
         {
-            await employeeService.DeleteEmployeeAsync(Employee.EployeeID);
-            await OnClose.InvokeAsync(null);
+            if (Employee != null)
+            {
+                await employeeService.DeleteEmployeeAsync(Employee.EployeeID);
+                await OnClose.InvokeAsync(null);
+            }
         }
+        catch (HttpResponseExeption ex)
+        {
+
+            ErrorService.ReportError((int)ex.Status, ex.Message);
+            NavigationManager.NavigateTo("/error");
+        }
+
     }
 
 
@@ -85,9 +106,18 @@
     private async Task HandleEmployeeUpdated(EmployeeDTO updatedEmployee)
     {
 
-        Position = await positionService.GetPositionByIdAsync(Employee.PositionID); ;
+        try
+        {
+            Position = await positionService.GetPositionByIdAsync(Employee.PositionID); ;
+            Employee = updatedEmployee;
+            IsEditing = false;
+        }
+        catch (HttpResponseExeption ex)
+        {
 
-        Employee = updatedEmployee;
-        IsEditing = false;
+            ErrorService.ReportError((int)ex.Status, ex.Message);
+            NavigationManager.NavigateTo("/error");
+        }
+    
     }
 }

@@ -17,6 +17,8 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
             builder.Services.AddScoped<IPositionRepository, PositionRepository>();
             builder.Services.AddScoped<IPositionService, PositionService>();
+            builder.Services.AddScoped<ErrorService>();
+
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7201") });
 

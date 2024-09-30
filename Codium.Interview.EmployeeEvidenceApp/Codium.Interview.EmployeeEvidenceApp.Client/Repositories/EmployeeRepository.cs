@@ -1,4 +1,5 @@
 ﻿using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
+using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -17,7 +18,13 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
         public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity)
         {
             var response = await _httpClient.PostAsJsonAsync("/api/Employee/AddEmployee", entity);
-            response.EnsureSuccessStatusCode(); // Check for HTTP errors
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpResponseExeption(await response.Content.ReadAsStringAsync(), response.StatusCode); 
+            }
+
+
 
             var responseContent = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -32,16 +39,20 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
         public async Task DeleteEmployeeAsync(int id)
         {
             var response = await _httpClient.DeleteAsync($"/api/Employee/DeleteEmployee/{id}");
-            response.EnsureSuccessStatusCode(); // Check for HTTP errors
-
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpResponseExeption(await response.Content.ReadAsStringAsync(), response.StatusCode);
+            }
 
         }
 
         public async Task<List<EmployeeListDTO>> GetAllEmployees()
         {
             var response = await _httpClient.GetAsync("/api/Employee/Employees");
-            response.EnsureSuccessStatusCode(); // Check for HTTP errors
-
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpResponseExeption(await response.Content.ReadAsStringAsync(), response.StatusCode);
+            }
             var responseContent = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
             {
@@ -49,7 +60,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
             };
 
             var result = JsonSerializer.Deserialize<List<EmployeeListDTO>>(responseContent, options);
-            return result ?? new List<EmployeeListDTO>();
+            return result;
 
         }
         public async Task<EmployeeDTO> GetEmployeeByIdAsync(int id)
@@ -70,8 +81,10 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
         public async Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity)
         {
             var response = await _httpClient.PutAsJsonAsync("/api/Employee/UpdateEmployee", entity);
-            response.EnsureSuccessStatusCode(); // Check for HTTP errors
-
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpResponseExeption(await response.Content.ReadAsStringAsync(), response.StatusCode);
+            }
             var responseContent = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
             {

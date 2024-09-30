@@ -1,7 +1,33 @@
 ﻿@page "/error"
+@using Codium.Interview.EmployeeEvidenceApp.Client.Services
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Other
+@inject ErrorService ErrorService
+@implements IDisposable
 
-<h3>Error</h3>
+<h1>Error</h1>
+
+@if (ErrorService.LastError != null)
+{
+    <p>Error code: @ErrorService.LastError.ErrorCode</p>
+    <p>Error message: @ErrorService.LastError.ErrorMessage</p>
+}
 
 @code {
+    private ErrorInfo errorInfo;
 
+    protected override void OnInitialized()
+    {
+        ErrorService.OnError += HandleError;
+    }
+
+    private void HandleError(ErrorInfo info)
+    {
+        errorInfo = info;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        ErrorService.OnError -= HandleError;
+    }
 }

@@ -19,8 +19,17 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
         [HttpGet("Employees")]
         public async Task<ActionResult<List<EmployeeListDTO>>> GetEmployees()
         {
-            // errors
-            return Ok(await _employeeService.GetAllEmployees());
+            
+            try
+            {
+                return Ok(await _employeeService.GetAllEmployees());
+            }
+            catch (Exception ex)
+            {
+                //log
+                return StatusCode(500, "Internal server error");
+            }
+
         }
 
         [HttpGet("Employee/{id}")]
@@ -32,9 +41,15 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
 
                 return Ok(employee);
             }
-            catch (EmployeeNotFoundException)
+            catch (EmployeeNotFoundException ex)
             {
+                //log
                 return NotFound("Employee not found!");
+            }
+            catch (Exception ex)
+            {
+                //log
+                return StatusCode(500, "Internal server error!");
             }
 
         }
@@ -43,19 +58,25 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
         public async Task<ActionResult<EmployeeDTO>> AddEmployee(EmployeeDTO employee)
         {
             
-
             try
             {
                 var result = await _employeeService.AddEmployeeAsync(employee);
                 return Ok(result);
             }
-            catch (EmployeeExisitsException)
+            catch (EmployeeExisitsException ex)
             {
+                //log
                 return BadRequest("Employee already exists!");
             }
-            catch (ExternalAPINotWorkingException)
+            catch (ExternalAPINotWorkingException ex )
             {
+                //log
                 return StatusCode(500, "External API not working!");
+            }
+            catch (Exception ex)
+            {
+                //log
+                return StatusCode(500, "Internal server error!");
             }
 
         }
@@ -68,9 +89,15 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
                 await _employeeService.DeleteEmployeeAsync(id);
                 return Ok();
             }
-            catch (EmployeeNotFoundException)
+            catch (EmployeeNotFoundException ex)
             {
+                //log
                 return NotFound("Employee not found!");
+            }
+            catch (Exception ex)
+            {
+                //log
+                return StatusCode(500, "Internal server error!");
             }
         }
 
@@ -82,13 +109,17 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
                 var result = await _employeeService.UpdateEmployeeAsync(employee);
                 return Ok(result);
             }
-            catch (EmployeeNotFoundException)
+            catch (EmployeeNotFoundException ex)
             {
                 return NotFound("Employee not found!");
             }
-            catch (ExternalAPINotWorkingException)
+            catch (ExternalAPINotWorkingException ex)
             {
                 return StatusCode(500, "External API not working!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error!");
             }
         }
 

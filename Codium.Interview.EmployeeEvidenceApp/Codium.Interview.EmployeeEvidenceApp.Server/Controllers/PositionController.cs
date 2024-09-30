@@ -19,14 +19,31 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
         [HttpGet("Positions")]
         public async Task<ActionResult<List<PositionDTO>>> GetPositions()
         {
-            // errors
-            return Ok(await _positionService.GetAllPositions());
+            try
+            {
+                return Ok(await _positionService.GetAllPositions());
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
         }
 
         [HttpGet("Position/{id}")]
         public async Task<ActionResult<PositionDTO>> GetPositionById(int id)
         {
-            return Ok(await _positionService.GetPositionByIdAsync(id));
+
+            try
+            {
+                return Ok(await _positionService.GetPositionByIdAsync(id));
+
+            }
+            catch (Exception ex)
+            {
+
+                return StatusCode(500, "Internal server error");
+            }
+
         }
 
 

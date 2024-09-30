@@ -1,10 +1,11 @@
 ﻿@using Codium.Interview.EmployeeEvidenceApp.Client.Services
 @using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
 @using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions
 @inject IPositionService positionService
 @inject IEmployeeService EmployeeService
 @inject NavigationManager NavigationManager
-
+@inject ErrorService ErrorService
 
 <EditForm Model="@Employee" OnValidSubmit="@HandleValidSubmit">
     <DataAnnotationsValidator /> 
@@ -64,14 +65,33 @@
 
     protected override async Task OnInitializedAsync()
     {
-        positions = await positionService.GetAllPositions();
+        try
+        {
+            positions = await positionService.GetAllPositions();
+        }
+        catch (HttpResponseExeption ex)
+        {
+
+            ErrorService.ReportError((int)ex.Status, ex.Message);
+            NavigationManager.NavigateTo("/error");
+        }
     }
 
     protected async Task HandleValidSubmit()
-    {
-        Employee = await EmployeeService.UpdateEmployeeAsync(Employee);
-        await OnEmployeeUpdated.InvokeAsync(Employee); // Pass the updated Employee
-        await OnCancel.InvokeAsync();
+    {        
+        try
+        {
+            Employee = await EmployeeService.UpdateEmployeeAsync(Employee);
+            await OnEmployeeUpdated.InvokeAsync(Employee); // Pass the updated Employee
+            await OnCancel.InvokeAsync();
+
+        }
+        catch (HttpResponseExeption ex)
+        {
+
+            ErrorService.ReportError((int)ex.Status, ex.Message);
+            NavigationManager.NavigateTo("/error");
+        }
 
     }
 
