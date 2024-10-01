@@ -1,4 +1,5 @@
 ﻿using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
+using Microsoft.AspNetCore.Components.Forms;
 using System.Net.Http;
 using System.Text.Json;
 
@@ -12,6 +13,6 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
         Task<List<EmployeeListDTO>> GetAllEmployees();
         Task<EmployeeDTO> GetEmployeeByIdAsync(int id);
         Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity);
-        
+        Task UploadEmployeesFile(EmployeeFileDTO employeesFile);
     }
 }

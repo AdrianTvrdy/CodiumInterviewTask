@@ -15,7 +15,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
         public required string Name { get; set; }
         public required string Surname { get; set; }
         [ForeignKey("Position")] 
-        public int PositionID { get; set; } 
+        public int? PositionID { get; set; } 
         public required DateTime BirthDate { get; set; }
         public Position? Position { get; set; }
         public required string IPaddress { get; set; }

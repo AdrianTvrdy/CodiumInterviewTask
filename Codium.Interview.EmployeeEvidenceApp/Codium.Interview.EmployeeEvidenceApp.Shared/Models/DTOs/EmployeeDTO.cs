@@ -20,7 +20,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
         [Required]
         public DateTime BirthDate { get; set; }
         [Required]
-        public int PositionID { get; set; }
+        public int? PositionID { get; set; }
         [Required]
         [RegularExpression(@"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$", ErrorMessage = "Invalid IP address format.")]
         public string IPaddress { get; set; }

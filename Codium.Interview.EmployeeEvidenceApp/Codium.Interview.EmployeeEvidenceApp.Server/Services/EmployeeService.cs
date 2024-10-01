@@ -6,6 +6,7 @@ using Codium.Interview.EmployeeEvidenceApp.Server.Repositories;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
@@ -15,10 +16,12 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IPositionRepository _positionRepository;
 
-        public EmployeeService(IEmployeeRepository employeeRepository)
+        public EmployeeService(IEmployeeRepository employeeRepository, IPositionRepository positionRepository)
         {
             _employeeRepository = employeeRepository;
+            _positionRepository = positionRepository;
         }
 
         public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity)
@@ -35,6 +38,39 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
             }
 
             return await _employeeRepository.AddEmployeeAsync(entity);
+        }
+
+        public async Task UploadEmployeesAsync(EmployeeFileDTO entity)
+        {
+            foreach (var employee in entity.Employees)
+            {
+                if (await _employeeRepository.GetEmployeeCountByIdCompositeKey(employee.Name, employee.Surname, DateTime.ParseExact(employee.BirthDate, "yyyy/MM/dd", null)) == 0)
+                {
+                    var newEmployee = new EmployeeDTO
+                    {
+                        Name = employee.Name,
+                        Surname = employee.Surname,
+                        BirthDate = DateTime.ParseExact(employee.BirthDate, "yyyy/MM/dd", null),
+                        IPaddress = employee.IPaddress
+                    };    
+                    
+                    newEmployee.IPCountryCode = await CountryCodeApi.GetCountryCodeFromIP(newEmployee.IPaddress);
+
+
+                    // get id of position
+                    if (employee.Position != null)
+                    {
+                        var positionId = await _positionRepository.GetPositionIdByNameAsync(employee.Position);
+                        if (positionId != null)
+                        {
+                            newEmployee.PositionID = positionId;
+                        }
+                    }
+
+
+                    await _employeeRepository.AddEmployeeAsync(newEmployee);
+                }
+            }
         }
 
         public async Task DeleteEmployeeAsync(int id)

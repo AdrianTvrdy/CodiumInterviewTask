@@ -32,6 +32,33 @@
 
 <button class="btn btn-primary" @onclick="UploadFile" disabled="@(!positionsFileSelected && !employeesFileSelected)">Upload</button>
 
+
+@if (showModal)
+{
+    <div class="modal fade show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Results</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row mb-3">
+                        <div class="col-md-4"><strong>@positionsModalTitle</strong></div>
+                        <div class="col-md-8">@positionsModalMessage</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4"><strong>@employeesModalTitle</strong></div>
+                        <div class="col-md-8">@employeesModalMessage</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @onclick="CloseModal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 @code {
     private string? positionsFileName;
     private string? employeesFileName;
@@ -39,6 +66,13 @@
     private IBrowserFile? employeesFile;
     private bool positionsFileSelected = false;
     private bool employeesFileSelected = false;
+
+    private bool showModal = false;
+    private string positionsModalTitle = "";
+    private string positionsModalMessage = "";
+    private string employeesModalTitle = "";
+    private string employeesModalMessage = "";
+
 
     private async Task HandlePositionsFileSelected(InputFileChangeEventArgs e)
     {
@@ -69,42 +103,53 @@
             if (positionsFile != null)
             {
                 await PositionService.UploadPositionsAsync(positionsFile);
+            
+                showModal = true;
+                positionsModalTitle = "Positions JSON file uploaded";
+                positionsModalMessage = "The positions JSON file has been uploaded successfully.";
             }
         }
         catch (JsonException ex)
         {
-            Console.Error.WriteLine($"JSON deserialization error: {ex.Message}");
-            // ... (e.g., display an error message to the user) ...
+            showModal = true;
+            positionsModalTitle = "Error uploading positions JSON file";
+            positionsModalMessage = $"JSON deserialization error: {ex.Message}";
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"An error occurred: {ex.Message}");
-            // ... (e.g., display an error message to the user) ...
+            showModal = true;
+            positionsModalTitle = "Error uploading positions JSON file";
+            positionsModalMessage = $"An error occurred: {ex.Message}";
         }
 
 
 
         try
         {
-
             if (employeesFile != null)
             {
-                using (var stream = employeesFile.OpenReadStream())
-                {
-                    var employees = await JsonSerializer.DeserializeAsync<EmployeeFileDTO>(stream);
-                }
-
+                await EmployeeService.UploadEmployeesFile(employeesFile);
+            
+                showModal = true;
+                employeesModalTitle = "Employees JSON file uploaded";
+                employeesModalMessage = "The employees JSON file has been uploaded successfully.";
+            
             }
         }
         catch (JsonException ex)
         {
-            Console.Error.WriteLine($"JSON deserialization error: {ex.Message}");
+
+            showModal = true;
+            employeesModalTitle = "Error uploading employees JSON file";
+            employeesModalMessage = $"JSON deserialization error: Wrong file format";
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"An error occurred: {ex.Message}");
+            showModal = true;
+            employeesModalTitle = "Error uploading employees JSON file";
+            employeesModalMessage = $"An error occurred: Wrong file format";
         }
-
+        
         // 5.  Reset the UI
         positionsFileName = null;
         employeesFileName = null;
@@ -112,5 +157,15 @@
         employeesFile = null;
         positionsFileSelected = false;
         employeesFileSelected = false;
+    }
+
+
+    private void CloseModal()
+    {
+        showModal = false;
+        positionsModalMessage = "";
+        employeesModalMessage = "";
+        positionsModalTitle = "";
+        employeesModalTitle = "";
     }
 }

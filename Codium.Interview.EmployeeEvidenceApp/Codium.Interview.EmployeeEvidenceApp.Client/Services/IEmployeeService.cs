@@ -1,4 +1,5 @@
 ﻿using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Client.Services
 {
@@ -9,6 +10,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Services
         Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity);
         Task DeleteEmployeeAsync(int id);
         Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity);
+        Task UploadEmployeesFile(IBrowserFile employeesFile);
 
     }
 }

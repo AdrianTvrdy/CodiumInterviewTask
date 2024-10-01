@@ -28,7 +28,11 @@
                         <p>Name: @Employee.Name</p>
                         <p>Surname: @Employee.Surname</p>
                         <p>Birth Date: @Employee.BirthDate.ToString("yyyy/MM/dd")</p>
-                        <p>Position: @Position.PositionName</p>
+
+                        @if (Employee.PositionID is not null)
+                        {
+                            <p>Position: @Position.PositionName</p>
+                        }
                         <p>IP Address: @Employee.IPaddress</p>
                         <p>IP Country Code: @Employee.IPCountryCode</p>
                     }
@@ -68,7 +72,12 @@
         try
         {
             Employee = await employeeService.GetEmployeeByIdAsync((int)EmployeeID);
-            Position = await positionService.GetPositionByIdAsync(Employee.PositionID);
+
+            if (Employee.PositionID is not null)
+            {
+                Position = await positionService.GetPositionByIdAsync((int)Employee.PositionID);
+            }
+
         }
         catch (HttpResponseExeption ex)
         {
@@ -109,7 +118,12 @@
 
         try
         {
-            Position = await positionService.GetPositionByIdAsync(Employee.PositionID); ;
+
+            if (Employee.PositionID is not null)
+            {
+                Position = await positionService.GetPositionByIdAsync((int)Employee.PositionID);
+            }
+
             Employee = updatedEmployee;
             IsEditing = false;
         }

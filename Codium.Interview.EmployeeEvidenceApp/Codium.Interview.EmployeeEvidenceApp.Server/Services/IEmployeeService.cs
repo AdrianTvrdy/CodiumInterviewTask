@@ -11,7 +11,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
         Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity);
         Task DeleteEmployeeAsync(int id);
         Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity);
-
+        Task UploadEmployeesAsync(EmployeeFileDTO entity);
 
     }
 }

@@ -124,6 +124,24 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
         }
 
 
+        [HttpPost("Employees/UploadFile")]
+        public async Task<ActionResult> UploadEmployees([FromBody] EmployeeFileDTO employees)
+        {
+            try
+            {
+                await _employeeService.UploadEmployeesAsync(employees);
+                return Ok();
+            }
+            catch(ExternalAPINotWorkingException ex )
+            {
+                return StatusCode(500, "External API not working!");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+
+        }
 
     }
 }

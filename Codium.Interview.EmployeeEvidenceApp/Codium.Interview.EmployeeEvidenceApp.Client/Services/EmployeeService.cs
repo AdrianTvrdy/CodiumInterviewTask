@@ -1,5 +1,6 @@
 ﻿using Codium.Interview.EmployeeEvidenceApp.Client.Repositories;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
+using Microsoft.AspNetCore.Components.Forms;
 using System.Net.Http.Json;
 using System.Text.Json;
 
@@ -37,6 +38,17 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Services
         public Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity)
         {
             return _employeeRepository.UpdateEmployeeAsync(entity);
+        }
+
+        public async Task UploadEmployeesFile(IBrowserFile employeesFile)
+        {
+            using (var stream = employeesFile.OpenReadStream())
+            {
+                var employees = await JsonSerializer.DeserializeAsync<EmployeeFileDTO>(stream);
+            
+                await _employeeRepository.UploadEmployeesFile(employees);
+
+            }
         }
     }
 
