@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
 {
+    /// <summary>
+    /// Data transfer object for the JSON file with employees
+    /// </summary>
     public class EmployeeFileDTO
     {
         [JsonPropertyName("employees")]

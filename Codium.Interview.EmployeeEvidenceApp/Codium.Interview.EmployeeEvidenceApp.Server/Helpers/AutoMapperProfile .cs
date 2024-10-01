@@ -4,6 +4,9 @@ using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Server.Helpers
 {
+    /// <summary>
+    /// Class that contains the mapping between the entities and the DTOs
+    /// </summary>
     public class AutoMapperProfile : Profile
     {
         public AutoMapperProfile()

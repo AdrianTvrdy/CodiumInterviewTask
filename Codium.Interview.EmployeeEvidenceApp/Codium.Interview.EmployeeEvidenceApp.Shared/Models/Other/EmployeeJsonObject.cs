@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.Other
 {
+    /// <summary>
+    /// Class representing a single the JSON object in file that is sent to the client
+    /// </summary>
     public class EmployeeJsonObject
     {
         public string Name { get; set; }

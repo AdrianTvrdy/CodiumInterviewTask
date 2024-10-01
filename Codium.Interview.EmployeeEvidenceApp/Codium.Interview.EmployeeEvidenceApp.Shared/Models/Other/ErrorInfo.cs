@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.Other
 {
+    /// <summary>
+    /// Class that passes error information to the client error page
+    /// </summary>
     public class ErrorInfo
     {
         public int ErrorCode { get; set; }

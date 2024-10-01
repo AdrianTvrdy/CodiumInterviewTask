@@ -18,11 +18,10 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Repositories
             this._mapper = mapper;
         }
 
-
-        public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity)
+        public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO employee)
         {
-            var employee = _mapper.Map<Employee>(entity);
-            var result = await _dbContext.Employees.AddAsync(employee);
+            var entity = _mapper.Map<Employee>(employee);
+            var result = await _dbContext.Employees.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
            
             return _mapper.Map<EmployeeDTO>(result.Entity);
@@ -30,21 +29,21 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Repositories
 
         public async Task DeleteEmployeeByIdAsync(int id)
         {
-            var existingEmployee = await _dbContext.Employees.FindAsync(id);
-            _dbContext.Employees.Remove(existingEmployee);
+            var existingEntity = await _dbContext.Employees.FindAsync(id);
+            _dbContext.Employees.Remove(existingEntity);
             await _dbContext.SaveChangesAsync();
         }
 
         public async Task<List<EmployeeListDTO>> GetAllEmployees()
         {
-            var employees = await _dbContext.Employees.ToListAsync();
-            return _mapper.Map<List<EmployeeListDTO>>(employees);
+            var entities = await _dbContext.Employees.ToListAsync();
+            return _mapper.Map<List<EmployeeListDTO>>(entities);
         }
 
         public async Task<EmployeeDTO> GetEmployeeByIdAsync(int id)
         {
-            var employee = await _dbContext.Employees.FirstOrDefaultAsync(e => e.EployeeID == id);
-            return _mapper.Map<EmployeeDTO>(employee);
+            var entity = await _dbContext.Employees.FirstOrDefaultAsync(e => e.EployeeID == id);
+            return _mapper.Map<EmployeeDTO>(entity);
         }
 
 
@@ -55,24 +54,22 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Repositories
                 x.Name == name &&
                 x.Surname == surename &&
                 DateTime.Compare(x.BirthDate.Date, birthdate.Date) == 0);
-            
-            // case? 
-            // diacritics?
         }
 
-        public async Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity)
+        public async Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO employee)
         {
-            var employee = await _dbContext.Employees.FirstOrDefaultAsync(e => e.EployeeID == entity.EployeeID);
+            var entity = await _dbContext.Employees.FirstOrDefaultAsync(e => e.EployeeID == employee.EployeeID);
 
-            employee.Name = entity.Name;
-            employee.Surname = entity.Surname;
-            employee.BirthDate = entity.BirthDate;
-            employee.IPaddress = entity.IPaddress;
-            employee.IPCountryCode = entity.IPCountryCode;
-            employee.PositionID = entity.PositionID;
+            entity.Name = employee.Name;
+            entity.Surname = employee.Surname;
+            entity.BirthDate = employee.BirthDate;
+            entity.IPaddress = employee.IPaddress;
+            entity.IPCountryCode = employee.IPCountryCode;
+            entity.PositionID = employee.PositionID;
 
-            var result = _dbContext.Employees.Update(employee);
+            var result = _dbContext.Employees.Update(entity);
             await _dbContext.SaveChangesAsync();
+
             return _mapper.Map<EmployeeDTO>(result.Entity);
         }
 

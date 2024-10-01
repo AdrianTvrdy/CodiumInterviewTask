@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
 {
+    /// <summary>
+    /// A Controller for managing employees
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     public class EmployeeController : ControllerBase
@@ -19,10 +22,14 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
         [HttpGet("Employees")]
         public async Task<ActionResult<List<EmployeeListDTO>>> GetEmployees()
         {
-            
             try
             {
                 return Ok(await _employeeService.GetAllEmployees());
+            }
+            catch (EmployeeRepositoryException ex)
+            {
+                //log
+                return StatusCode(500, "Internal server error");
             }
             catch (Exception ex)
             {
@@ -115,7 +122,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
             }
             catch (ExternalAPINotWorkingException ex)
             {
-                return StatusCode(500, "External API not working!");
+                return StatusCode(500, "External API not working");
             }
             catch (Exception ex)
             {
@@ -134,7 +141,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
             }
             catch(ExternalAPINotWorkingException ex )
             {
-                return StatusCode(500, "External API not working!");
+                return StatusCode(500, "External API not working");
             }
             catch (Exception ex)
             {

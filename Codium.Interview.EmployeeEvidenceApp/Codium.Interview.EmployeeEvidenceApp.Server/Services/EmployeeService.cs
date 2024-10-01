@@ -13,6 +13,9 @@ using System.Text.Json;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 {
+    /// <summary>
+    /// Service for managing employees
+    /// </summary>
     public class EmployeeService : IEmployeeService
     {
         private readonly IEmployeeRepository _employeeRepository;
@@ -24,9 +27,9 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
             _positionRepository = positionRepository;
         }
 
-        public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity)
+        public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO employee)
         {
-            int count = _employeeRepository.GetEmployeeCountByIdCompositeKey(entity.Name, entity.Surname, entity.BirthDate).Result;
+            int count = _employeeRepository.GetEmployeeCountByIdCompositeKey(employee.Name, employee.Surname, employee.BirthDate).Result;
 
             if (count > 0)
             {
@@ -34,15 +37,15 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
             }
             else
             {
-                entity.IPCountryCode = await CountryCodeApi.GetCountryCodeFromIP(entity.IPaddress);
+                employee.IPCountryCode = await CountryCodeApi.GetCountryCodeFromIP(employee.IPaddress);
             }
 
-            return await _employeeRepository.AddEmployeeAsync(entity);
+            return await _employeeRepository.AddEmployeeAsync(employee);
         }
 
-        public async Task UploadEmployeesAsync(EmployeeFileDTO entity)
+        public async Task UploadEmployeesAsync(EmployeeFileDTO employees)
         {
-            foreach (var employee in entity.Employees)
+            foreach (var employee in employees.Employees)
             {
                 if (await _employeeRepository.GetEmployeeCountByIdCompositeKey(employee.Name, employee.Surname, DateTime.ParseExact(employee.BirthDate, "yyyy/MM/dd", null)) == 0)
                 {
@@ -56,8 +59,6 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
                     
                     newEmployee.IPCountryCode = await CountryCodeApi.GetCountryCodeFromIP(newEmployee.IPaddress);
 
-
-                    // get id of position
                     if (employee.Position != null)
                     {
                         var positionId = await _positionRepository.GetPositionIdByNameAsync(employee.Position);
@@ -66,7 +67,6 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
                             newEmployee.PositionID = positionId;
                         }
                     }
-
 
                     await _employeeRepository.AddEmployeeAsync(newEmployee);
                 }
@@ -92,7 +92,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 
             if (result is null)
             {
-                throw new Exception();
+                throw new EmployeeRepositoryException();
             }
 
             return result;

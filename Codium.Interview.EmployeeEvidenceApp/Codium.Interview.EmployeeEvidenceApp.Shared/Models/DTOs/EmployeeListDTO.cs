@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
 {
+    /// <summary>
+    /// Data Transfer Object for Employee entity displayed in the all employees list
+    /// </summary>
     public class EmployeeListDTO
     {
         public int EployeeID { get; set; }

@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
 {
+    /// <summary>
+    /// Entity representing an employee in the company
+    /// </summary>
     public class Employee
     {
         [Key]

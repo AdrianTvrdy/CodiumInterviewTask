@@ -10,6 +10,9 @@ using System.Runtime.CompilerServices;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 {
+    /// <summary>
+    /// Service for managing positions
+    /// </summary>
     public class PositionService : IPositionService
     {
         private readonly IPositionRepository _positionRepository;
@@ -21,27 +24,27 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 
         public async Task<List<PositionDTO>> GetAllPositions()
         {
-            var res = await _positionRepository.GetAllPositions();
+            var positions = await _positionRepository.GetAllPositions();
 
-            if (res is null)
+            if (positions is null)
             {
-                throw new Exception();
+                throw new PositionRepositoryExeption();
             }
 
-            return res;                
+            return positions;                
         }
 
         public async Task<PositionDTO> GetPositionByIdAsync(int id)
         {
 
-            var res = await _positionRepository.GetPositionByIdAsync(id);
+            var position = await _positionRepository.GetPositionByIdAsync(id);
 
-            if (res is null)
+            if (position is null)
             {
                 throw new PositionNotFoundExeption();
             }
 
-            return res;
+            return position;
         }
 
         public async Task UploadPositionsAsync(PositionFileDTO positions)
