@@ -2,6 +2,7 @@
 using Codium.Interview.EmployeeEvidenceApp.Server.Data;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities;
+using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Server.Repositories
@@ -17,14 +18,22 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Repositories
             this._mapper = mapper;
         }
 
-        public async Task<Position> AddPositionAsync(PositionDTO entity)
+        public async Task<PositionDTO> AddPositionAsync(PositionDTO entity)
         {
-            throw new NotImplementedException();
+            var position = _mapper.Map<Position>(entity);
+            var result = await _dbContext.Positions.AddAsync(position);
+            await _dbContext.SaveChangesAsync();
+
+            return _mapper.Map<PositionDTO>(result.Entity);
+
         }
 
         public async Task DeletePositionAsync(PositionDTO entity)
         {
-            throw new NotImplementedException();
+            var existingPosition = await _dbContext.Positions.FindAsync(entity.PositionID);
+
+            _dbContext.Positions.Remove(existingPosition);
+            await _dbContext.SaveChangesAsync();
         }
 
         public async Task<List<PositionDTO>> GetAllPositions()
@@ -39,9 +48,29 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Repositories
             return _mapper.Map<PositionDTO>(position);
         }
 
-        public async Task UpdatePositionAsync(PositionDTO entity)
+        public async Task<PositionDTO> GetPositionByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            var position = await _dbContext.Positions.FirstOrDefaultAsync(e => e.PositionName == name);
+            return _mapper.Map<PositionDTO>(position);
         }
+
+        public async Task<int?> GetPositionIdByNameAsync(string name)
+        {
+            var position = await _dbContext.Positions.FirstOrDefaultAsync(e => e.PositionName == name);
+            return position is null ? null : position.PositionID;
+        }
+
+
+        public async Task<PositionDTO> UpdatePositionAsync(PositionDTO entity)
+        {
+            var position = await _dbContext.Positions.FirstOrDefaultAsync(e => e.PositionID == entity.PositionID);
+
+            position.PositionName = entity.PositionName;
+
+            var result = _dbContext.Positions.Update(position);
+            await _dbContext.SaveChangesAsync();
+            return _mapper.Map<PositionDTO>(result.Entity);
+        }
+
     }
 }

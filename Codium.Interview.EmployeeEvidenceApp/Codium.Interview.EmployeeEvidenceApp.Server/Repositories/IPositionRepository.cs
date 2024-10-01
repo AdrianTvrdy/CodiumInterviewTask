@@ -6,11 +6,13 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Repositories
 {
     public interface IPositionRepository
     {
-        Task<Position> AddPositionAsync(PositionDTO entity);
+        Task<PositionDTO> AddPositionAsync(PositionDTO entity);
         Task DeletePositionAsync(PositionDTO entity);
         Task<List<PositionDTO>> GetAllPositions();
         Task<PositionDTO> GetPositionByIdAsync(int id);
-        Task UpdatePositionAsync(PositionDTO entity);
+        Task<PositionDTO> GetPositionByNameAsync(string name);
+        Task<int?> GetPositionIdByNameAsync(string name);
+        Task<PositionDTO> UpdatePositionAsync(PositionDTO entity);
         
     }
 }

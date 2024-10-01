@@ -7,6 +7,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
     {
         Task<List<PositionDTO>> GetAllPositions();
         Task<PositionDTO> GetPositionByIdAsync(int id);
+        Task UploadPositionsAsync(PositionFileDTO positions);
 
     }
 }

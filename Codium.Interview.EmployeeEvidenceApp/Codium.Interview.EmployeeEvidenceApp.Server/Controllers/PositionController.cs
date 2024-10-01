@@ -46,6 +46,20 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
 
         }
 
+        [HttpPost("Positions/UploadFile")]
+        public async Task<ActionResult> UploadPositions([FromBody] PositionFileDTO positions)
+        {
+            try
+            {
+                await _positionService.UploadPositionsAsync(positions);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
 
     }
 }

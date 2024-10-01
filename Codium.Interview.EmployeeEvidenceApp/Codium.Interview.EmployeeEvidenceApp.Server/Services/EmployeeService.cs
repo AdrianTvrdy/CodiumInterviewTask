@@ -52,8 +52,14 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 
         public async Task<List<EmployeeListDTO>> GetAllEmployees()
         {
-            // errors
-            return await _employeeRepository.GetAllEmployees();
+            var result = await _employeeRepository.GetAllEmployees();
+
+            if (result is null)
+            {
+                throw new Exception();
+            }
+
+            return result;
         }
 
         public async Task<EmployeeDTO> GetEmployeeByIdAsync(int id)
@@ -86,11 +92,6 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 
 
                 return await _employeeRepository.UpdateEmployeeAsync(entity);
-
-            
-
-
-
         }
     }
 }

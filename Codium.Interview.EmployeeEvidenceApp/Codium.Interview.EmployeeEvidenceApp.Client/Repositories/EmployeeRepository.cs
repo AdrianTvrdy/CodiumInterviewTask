@@ -15,6 +15,18 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
             _httpClient = httpClient;
         }
 
+        public async Task UploadEmployeesAsync(EmployeeFileDTO entity)
+        {
+            var response = await _httpClient.PostAsJsonAsync("/api/Employee/UploadFile", entity);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpResponseExeption(await response.Content.ReadAsStringAsync(), response.StatusCode);
+            }
+        }
+
+
+
         public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity)
         {
             var response = await _httpClient.PostAsJsonAsync("/api/Employee/AddEmployee", entity);

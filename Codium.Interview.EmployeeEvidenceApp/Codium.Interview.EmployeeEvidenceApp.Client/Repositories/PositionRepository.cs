@@ -65,5 +65,16 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
         {
             throw new NotImplementedException();
         }
+
+        public async Task UploadPositionsAsync(PositionFileDTO entity)
+        {
+            var response = await _httpClient.PostAsJsonAsync("/api/Position/Positions/UploadFile", entity);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new HttpResponseExeption(await response.Content.ReadAsStringAsync(), response.StatusCode);
+            }
+        }
+
     }
 }

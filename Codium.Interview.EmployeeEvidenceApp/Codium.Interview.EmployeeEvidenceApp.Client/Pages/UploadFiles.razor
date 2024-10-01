@@ -1,8 +1,116 @@
 ﻿@page "/upload"
+@using Codium.Interview.EmployeeEvidenceApp.Client.Services
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
+@using Microsoft.AspNetCore.Components.Forms
+@using System.Net.Http.Headers
+@using System.Text.Json
+@inject IJSRuntime JSRuntime
+@inject IPositionService PositionService
+@inject IEmployeeService EmployeeService
+@inject ErrorService ErrorService
 
+<h1>Upload JSON Files</h1>
 
-<h3>UploadFiles</h3>
+<div class="row">
+    <div class="col-md-6">
+        <h2>Positions JSON</h2>
+        <InputFile id="positions-file" OnChange="HandlePositionsFileSelected" />
+        @if (positionsFileName != null)
+        {
+            <p>Selected file: @positionsFileName</p>
+        }
+    </div>
+    <div class="col-md-6">
+        <h2>Employees JSON</h2>
+        <InputFile id="employees-file" OnChange="HandleEmployeesFileSelected" />
+        @if (employeesFileName != null)
+        {
+            <p>Selected file: @employeesFileName</p>
+        }
+    </div>
+</div>
+
+<button class="btn btn-primary" @onclick="UploadFile" disabled="@(!positionsFileSelected && !employeesFileSelected)">Upload</button>
 
 @code {
+    private string? positionsFileName;
+    private string? employeesFileName;
+    private IBrowserFile? positionsFile;
+    private IBrowserFile? employeesFile;
+    private bool positionsFileSelected = false;
+    private bool employeesFileSelected = false;
 
+    private async Task HandlePositionsFileSelected(InputFileChangeEventArgs e)
+    {
+        positionsFile = e.File;
+        positionsFileName = e.File.Name;
+        positionsFileSelected = true;
+        await JSRuntime.InvokeVoidAsync("eval", "document.getElementById('positions-file').value = ''");
+    }
+
+    private async Task HandleEmployeesFileSelected(InputFileChangeEventArgs e)
+    {
+        employeesFile = e.File;
+        employeesFileName = e.File.Name;
+        employeesFileSelected = true;
+        await JSRuntime.InvokeVoidAsync("eval", "document.getElementById('employees-file').value = ''");
+    }
+
+    private async Task UploadFile()
+    {
+
+        if (positionsFile == null && employeesFile == null)
+        {
+            return;
+        }
+
+        try
+        {
+            if (positionsFile != null)
+            {
+                await PositionService.UploadPositionsAsync(positionsFile);
+            }
+        }
+        catch (JsonException ex)
+        {
+            Console.Error.WriteLine($"JSON deserialization error: {ex.Message}");
+            // ... (e.g., display an error message to the user) ...
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"An error occurred: {ex.Message}");
+            // ... (e.g., display an error message to the user) ...
+        }
+
+
+
+        try
+        {
+
+            if (employeesFile != null)
+            {
+                using (var stream = employeesFile.OpenReadStream())
+                {
+                    var employees = await JsonSerializer.DeserializeAsync<EmployeeFileDTO>(stream);
+                }
+
+            }
+        }
+        catch (JsonException ex)
+        {
+            Console.Error.WriteLine($"JSON deserialization error: {ex.Message}");
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"An error occurred: {ex.Message}");
+        }
+
+        // 5.  Reset the UI
+        positionsFileName = null;
+        employeesFileName = null;
+        positionsFile = null;
+        employeesFile = null;
+        positionsFileSelected = false;
+        employeesFileSelected = false;
+    }
 }
