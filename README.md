@@ -30,10 +30,8 @@ This project is a solution to the Codium interview task. It demonstrates a full-
 * **Codium.Interview.EmployeeEvidenceApp.Shared**: Library with entities, DTOs, exceptions, and other shared classes.
 
 ## Features
-
-* **[List the specific features of your employee evidence app.  For example:]**
-    * **View a list of employees.**
-    * **Add new employees.**
-    * **Edit existing employee details.**
-    * **Delete employee records.**
-    * **Upload JSON files with employees/positions to the database.**
+  * **View a list of employees.**
+  * **Add new employees.**
+  * **Edit existing employee details.**
+  * **Delete employee records.**
+  * **Upload JSON files with employees/positions to the database.**
