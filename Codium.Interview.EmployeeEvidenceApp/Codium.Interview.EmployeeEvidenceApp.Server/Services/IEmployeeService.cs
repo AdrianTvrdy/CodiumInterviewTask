@@ -1,5 +1,6 @@
 ﻿using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities;
+using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Other;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
@@ -47,8 +48,8 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
         /// Method on the service layer that uploads employees from a file
         /// </summary>
         /// <param name="employees">Data mapped to object EmployeeFileDTO from the JSON file</param>
-        /// <returns></returns>
-        Task UploadEmployeesAsync(EmployeeFileDTO employees);
+        /// <returns>Result with the number of skipped Employees and List of reasons for skips</returns>
+        Task<JsonUploadResult> UploadEmployeesAsync(EmployeeFileDTO employees);
 
     }
 }

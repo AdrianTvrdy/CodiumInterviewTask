@@ -5,12 +5,12 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.Other
+namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
 {
     /// <summary>
     /// Class representing a single the JSON object in file that is sent to the client
     /// </summary>
-    public class EmployeeJsonObject
+    public class JsonFileEmployeeDTO
     {
         public string Name { get; set; }
         public string Surname { get; set; }

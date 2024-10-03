@@ -4,6 +4,7 @@ using Codium.Interview.EmployeeEvidenceApp.Server.Repositories;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions;
+using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Other;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Runtime.CompilerServices;
@@ -47,8 +48,9 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
             return position;
         }
 
-        public async Task UploadPositionsAsync(PositionFileDTO positions)
+        public async Task<JsonUploadResult> UploadPositionsAsync(PositionFileDTO positions)
         {
+            var result = new JsonUploadResult();
             foreach (var position in positions.Positions)
             {
                 if (await _positionRepository.GetPositionByNameAsync(position) == null)
@@ -59,7 +61,13 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
                     };
                     await _positionRepository.AddPositionAsync(newPosition);
                 }
+                else
+                {
+                    result.Skipped++;
+                    result.Reasons.Add($"Position {position} upload skipped because it already exists.");
+                }
             }
+            return result;
         }
     }
 }

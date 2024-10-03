@@ -6,6 +6,7 @@ using Codium.Interview.EmployeeEvidenceApp.Server.Repositories;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions;
+using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Other;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -43,8 +44,9 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
             return await _employeeRepository.AddEmployeeAsync(employee);
         }
 
-        public async Task UploadEmployeesAsync(EmployeeFileDTO employees)
+        public async Task<JsonUploadResult> UploadEmployeesAsync(EmployeeFileDTO employees)
         {
+            var result = new JsonUploadResult();
             foreach (var employee in employees.Employees)
             {
                 if (await _employeeRepository.GetEmployeeCountByIdCompositeKey(employee.Name, employee.Surname, DateTime.ParseExact(employee.BirthDate, "yyyy/MM/dd", null)) == 0)
@@ -57,7 +59,18 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
                         IPaddress = employee.IPaddress
                     };    
                     
-                    newEmployee.IPCountryCode = await CountryCodeApi.GetCountryCodeFromIP(newEmployee.IPaddress);
+                    
+                    try
+                    {
+                        newEmployee.IPCountryCode = await CountryCodeApi.GetCountryCodeFromIP(newEmployee.IPaddress);
+                    }
+                    catch (ExternalAPINotWorkingException)
+                    {
+                        result.Skipped++;
+                        result.Reasons.Add($"Employee {employee.Name} {employee.Surname} {employee.BirthDate} skipped upload skipped because IP was not correct");
+                        continue;
+                    }
+
 
                     if (employee.Position != null)
                     {
@@ -70,7 +83,14 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 
                     await _employeeRepository.AddEmployeeAsync(newEmployee);
                 }
+                else
+                {
+
+                    result.Skipped++;
+                    result.Reasons.Add($"Employee {employee.Name} {employee.Surname} {employee.BirthDate} upload skipped because it already exists");
+                }
             }
+            return result;
         }
 
         public async Task DeleteEmployeeAsync(int id)

@@ -14,6 +14,6 @@ namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
     public class EmployeeFileDTO
     {
         [JsonPropertyName("employees")]
-        public List<EmployeeJsonObject> Employees { get; set; }
+        public List<JsonFileEmployeeDTO> Employees { get; set; }
     }
 }

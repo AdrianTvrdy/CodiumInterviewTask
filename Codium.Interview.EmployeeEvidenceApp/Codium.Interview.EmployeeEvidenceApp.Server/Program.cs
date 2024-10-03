@@ -7,6 +7,7 @@ using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
 using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Server
 {
@@ -16,6 +17,14 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            
+            // Add logging
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(builder.Configuration)
+                .CreateLogger();
+            builder.Host.UseSerilog();
+            
+            
             // Add services to the container.
             builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
@@ -30,7 +39,6 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-
 
             builder.Services.AddDbContext<ApplicationDbContext>(options => 
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -55,6 +63,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server
 
             app.UseAuthorization();
 
+            app.UseSerilogRequestLogging();
 
             app.MapControllers();
 
