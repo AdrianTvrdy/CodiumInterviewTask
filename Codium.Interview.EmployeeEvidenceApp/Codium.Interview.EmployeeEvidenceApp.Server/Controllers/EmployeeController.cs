@@ -113,7 +113,6 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
             }
             catch (Exception ex)
             {
-                //log
                 _logger.LogError(ex, "An error occurred while deleting employee.");
                 return StatusCode(500, "Internal server error!");
             }

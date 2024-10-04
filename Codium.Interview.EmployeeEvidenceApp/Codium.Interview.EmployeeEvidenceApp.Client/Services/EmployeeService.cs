@@ -15,9 +15,9 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Services
             _employeeRepository = employeeRepository;
         }
 
-        public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity)
+        public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO employee)
         {
-            return await _employeeRepository.AddEmployeeAsync(entity);
+            return await _employeeRepository.AddEmployeeAsync(employee);
         }
 
         public async Task DeleteEmployeeAsync(int id)
@@ -35,9 +35,9 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Services
             return await _employeeRepository.GetEmployeeByIdAsync(id);
         }
 
-        public Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity)
+        public Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO employee)
         {
-            return _employeeRepository.UpdateEmployeeAsync(entity);
+            return _employeeRepository.UpdateEmployeeAsync(employee);
         }
 
         public async Task UploadEmployeesFile(IBrowserFile employeesFile)
