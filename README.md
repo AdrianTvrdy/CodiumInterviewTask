@@ -7,6 +7,7 @@ This project is a solution to the Codium interview task. It demonstrates a full-
 * **.NET 8 SDK:**  [Download here](https://dotnet.microsoft.com/download/dotnet/8.0)
 * **Microsoft Visual Studio:**  [Download here](https://visualstudio.microsoft.com/downloads/)
 * **Microsoft SQL Server Management Studio:** [Download here](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver16)   
+   
 
 
 ## Getting Started
@@ -15,6 +16,9 @@ This project is a solution to the Codium interview task. It demonstrates a full-
    * **Ensure you have a local instance of SQL Server running.**
    * **Open `appsettings.json` in the `Codium.Interview.EmployeeEvidenceApp.Server` project.**
    * **Modify the `DefaultConnection` connection string to point to your local SQL Server database.**
+   * **Open the Package Manager Console (Tools -> NuGet Package Manager -> Package Manager Console).**
+   * **In the Package Manager Console, set the default project to `Codium.Interview.EmployeeEvidenceApp.Server`.**
+   * **Run the command `Update-Database` to create the database schema based on your migrations.**
 
 2. **Run the Application:**
    * **Open the solution in Visual Studio.**
