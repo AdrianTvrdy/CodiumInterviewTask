@@ -1,0 +1,51 @@
+﻿@using Codium.Interview.EmployeeEvidenceApp.Client.Services
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Entities
+@using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions
+@inject IPositionService positionService
+@inject IEmployeeService employeeService
+@inject NavigationManager NavigationManager
+@inject ErrorService ErrorService
+
+
+<EditForm Model="@position" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="positionName">Name:</label>
+        <InputText id="positionName" class="form-control" @bind-Value="position.PositionName" required />
+    </div>
+
+    <button type="submit" class="btn btn-add">Add Position</button>
+</EditForm>
+
+
+@code {
+    private PositionDTO position = new PositionDTO();
+
+
+    protected async Task HandleValidSubmit()
+    {
+
+        try
+        {
+            await positionService.AddPositionAsync(position);
+            NavigationManager.NavigateTo("/employees");
+
+        }
+        catch (HttpResponseExeption ex)
+        {
+            ErrorService.ReportError((int)ex.Status, ex.Message);
+            NavigationManager.NavigateTo("/error");
+
+        }
+        catch (Exception ex)
+        {
+            ErrorService.ReportError(500, ex.Message);
+            NavigationManager.NavigateTo("/error");
+        }
+
+
+    }
+}

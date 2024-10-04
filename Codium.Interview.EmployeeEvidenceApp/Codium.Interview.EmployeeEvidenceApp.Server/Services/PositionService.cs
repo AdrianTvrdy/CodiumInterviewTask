@@ -23,6 +23,19 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
             _positionRepository = employeeRepository;
         }
 
+        public async Task<PositionDTO> AddPositionAsync(PositionDTO position)
+        {
+            if (await _positionRepository.GetPositionByNameAsync(position.PositionName) == null)
+            {
+                var result = await _positionRepository.AddPositionAsync(position);
+                return result;
+            }
+            else
+            {
+                throw new PositionAlreadyExistsExeption();
+            }
+        }
+
         public async Task<List<PositionDTO>> GetAllPositions()
         {
             var positions = await _positionRepository.GetAllPositions();

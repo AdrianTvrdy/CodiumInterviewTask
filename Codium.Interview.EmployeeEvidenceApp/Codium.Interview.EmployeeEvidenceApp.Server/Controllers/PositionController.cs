@@ -95,6 +95,28 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
             }
         }
 
+        [HttpPost("AddPosition")]
+        public async Task<ActionResult<PositionDTO>> AddPosition([FromBody] PositionDTO position)
+        {
+            using var logContext = _logger.BeginScope("User AddPosition Request: {PositionName}", position.PositionName);
+            try
+            {
+                var result = await _positionService.AddPositionAsync(position);
+                _logger.LogInformation("Position added successfully.");
+                return Ok(result);
+            }
+            catch (PositionAlreadyExistsExeption ex)
+            {
+                _logger.LogWarning(ex, "Position already exists.");
+                return BadRequest($"Position {position.PositionName} already exists.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while adding position.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
 
     }
 }

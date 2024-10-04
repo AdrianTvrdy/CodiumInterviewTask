@@ -29,5 +29,12 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
         /// <returns></returns>
         Task<JsonUploadResult> UploadPositionsAsync(PositionFileDTO positions);
 
+        /// <summary>
+        /// Method on the service layer to add a position
+        /// </summary>
+        /// <param name="position">The PositionDTO object representing the position to add</param>
+        /// <returns>PositionDTO of the inserted Position</returns>
+        Task<PositionDTO> AddPositionAsync(PositionDTO position);
+
     }
 }

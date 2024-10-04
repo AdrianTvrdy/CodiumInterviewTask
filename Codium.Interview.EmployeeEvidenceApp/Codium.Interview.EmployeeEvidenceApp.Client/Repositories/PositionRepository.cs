@@ -15,6 +15,22 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
             _httpClient = httpClient;
         }
 
+        public async Task<PositionDTO> AddPositionAsync(PositionDTO position)
+        {
+            var response = _httpClient.PostAsJsonAsync("/api/Position/AddPosition", position);
+            if (!response.Result.IsSuccessStatusCode)
+            {
+                throw new HttpResponseExeption(response.Result.Content.ReadAsStringAsync().Result, response.Result.StatusCode);
+            }
+            var responseContent = response.Result.Content.ReadAsStringAsync().Result;
+            var options = new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+            };
+
+            var result = JsonSerializer.Deserialize<PositionDTO>(responseContent, options);
+            return result;
+        }
 
         public async Task<List<PositionDTO>> GetAllPositions()
         {

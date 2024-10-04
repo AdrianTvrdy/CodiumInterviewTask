@@ -31,5 +31,12 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
         /// <param name="positionsFile">The PositionFileDTO object containing the position data</param>
         /// <returns></returns>
         Task UploadPositionsAsync(PositionFileDTO positionsFile);
+
+        /// <summary>
+        /// Sends an HTTP POST request to add a new position
+        /// </summary>
+        /// <param name="position">The PositionDTO that represents the new position user wants to add</param>
+        /// <returns>PositionDTO representing the added position</returns>
+        Task<PositionDTO> AddPositionAsync(PositionDTO position);
     }
 }

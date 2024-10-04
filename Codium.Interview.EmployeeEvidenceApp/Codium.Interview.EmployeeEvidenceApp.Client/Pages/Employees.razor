@@ -8,13 +8,20 @@
 @inject NavigationManager NavigationManager
 @inject ErrorService ErrorService
 
-<div style="display: flex; align-items: center;">
+<div style="display: flex; justify-content: space-between; align-items: center;">
     <h3>Employees</h3>
-    <a href="/employees/add" class="btn btn-add" style="margin-left: auto;">
-        Add employee
-    </a>
 
+    <div style="display: flex; gap: 10px;">
+        <a href="/employees/add" class="btn btn-add">
+            Add employee
+        </a>
+
+        <a href="/positions/add" class="btn btn-add">
+            Add position
+        </a>
+    </div>
 </div>
+
 <div>
     @if (employees == null)
     {

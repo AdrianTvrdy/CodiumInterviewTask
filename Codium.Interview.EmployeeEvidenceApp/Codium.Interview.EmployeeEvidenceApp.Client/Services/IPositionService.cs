@@ -27,5 +27,12 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Services
         /// <param name="positionsFile">The IBrowserFile representing the position data file</param>
         /// <returns></returns>
         Task UploadPositionsAsync(IBrowserFile positionsFile);
+
+        /// <summary>
+        /// Adds a new position 
+        /// </summary>
+        /// <param name="position">The PositionDTO taht user input</param>
+        /// <returns>PositionDTO representing added position</returns>
+        Task<PositionDTO> AddPositionAsync(PositionDTO position);
     }
 }
