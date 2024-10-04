@@ -15,20 +15,9 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
             _httpClient = httpClient;
         }
 
-        public async Task<PositionDTO> AddPositionAsync(PositionDTO entity)
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task DeletePositionAsync(PositionDTO entity)
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<List<PositionDTO>> GetAllPositions()
         {
-
-
             var response = await _httpClient.GetAsync("/api/Position/Positions");
             if (!response.IsSuccessStatusCode)
             {
@@ -59,11 +48,6 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
 
             var result = JsonSerializer.Deserialize<PositionDTO>(responseContent, options);
             return result ?? new PositionDTO();
-        }
-
-        public async Task UpdatePositionAsync(PositionDTO entity)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task UploadPositionsAsync(PositionFileDTO entity)

@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-md-6">
         <h2>Positions JSON</h2>
-        <InputFile id="positions-file" OnChange="HandlePositionsFileSelected" />
+        <InputFile id="positions-file" OnChange="HandlePositionsFileSelected" accept=".json, directory" />
         @if (positionsFileName != null)
         {
             <p>Selected file: @positionsFileName</p>
@@ -22,7 +22,7 @@
     </div>
     <div class="col-md-6">
         <h2>Employees JSON</h2>
-        <InputFile id="employees-file" OnChange="HandleEmployeesFileSelected" />
+        <InputFile id="employees-file" OnChange="HandleEmployeesFileSelected" accept=".json, directory" />
         @if (employeesFileName != null)
         {
             <p>Selected file: @employeesFileName</p>
@@ -111,15 +111,16 @@
         }
         catch (JsonException ex)
         {
+
             showModal = true;
-            positionsModalTitle = "Error uploading positions JSON file";
-            positionsModalMessage = $"JSON deserialization error: {ex.Message}";
+            employeesModalTitle = "Error uploading employees JSON file";
+            employeesModalMessage = $"JSON deserialization error: Wrong file format";
         }
         catch (Exception ex)
         {
             showModal = true;
-            positionsModalTitle = "Error uploading positions JSON file";
-            positionsModalMessage = $"An error occurred: {ex.Message}";
+            employeesModalTitle = "Error uploading employees JSON file";
+            employeesModalMessage = $"An error occurred: Wrong file format";
         }
 
 
@@ -150,7 +151,6 @@
             employeesModalMessage = $"An error occurred: Wrong file format";
         }
         
-        // 5.  Reset the UI
         positionsFileName = null;
         employeesFileName = null;
         positionsFile = null;

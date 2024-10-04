@@ -6,7 +6,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Services
     public class ErrorService
     {
         public event Action<ErrorInfo> OnError;
-        public ErrorInfo LastError { get; private set; } // Store the last error
+        public ErrorInfo LastError { get; private set; }
 
         public void ReportError(int errorCode, string errorMessage)
         {

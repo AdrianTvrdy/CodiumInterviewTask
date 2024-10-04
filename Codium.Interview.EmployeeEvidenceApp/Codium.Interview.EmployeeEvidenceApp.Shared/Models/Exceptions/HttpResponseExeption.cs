@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions
 {
     /// <summary>
-    /// Exception thrown when the response status is not 200
+    /// Exception thrown when the response status is not 200 (client side error handling)
     /// </summary>
     public class HttpResponseExeption : Exception
     {

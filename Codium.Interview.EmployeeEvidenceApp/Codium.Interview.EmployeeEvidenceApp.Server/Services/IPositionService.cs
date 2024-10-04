@@ -1,4 +1,5 @@
 ﻿using Codium.Interview.EmployeeEvidenceApp.Shared.Models.DTOs;
+using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Other;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
@@ -26,7 +27,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
         /// </summary>
         /// <param name="positions">Data mapped to object PositionFileDTO from the JSON file</param>
         /// <returns></returns>
-        Task UploadPositionsAsync(PositionFileDTO positions);
+        Task<JsonUploadResult> UploadPositionsAsync(PositionFileDTO positions);
 
     }
 }

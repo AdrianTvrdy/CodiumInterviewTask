@@ -30,7 +30,6 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Services
             {
                 var positions = await JsonSerializer.DeserializeAsync<PositionFileDTO>(stream);
 
-
                 await _positionRepository.UploadPositionsAsync(positions);
             }
 

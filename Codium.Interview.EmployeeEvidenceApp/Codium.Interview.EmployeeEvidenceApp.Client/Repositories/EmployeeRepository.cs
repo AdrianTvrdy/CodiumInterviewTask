@@ -15,9 +15,9 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
             _httpClient = httpClient;
         }
 
-        public async Task UploadEmployeesAsync(EmployeeFileDTO entity)
+        public async Task UploadEmployeesAsync(EmployeeFileDTO employee)
         {
-            var response = await _httpClient.PostAsJsonAsync("/api/Employee/UploadFile", entity);
+            var response = await _httpClient.PostAsJsonAsync("/api/Employee/UploadFile", employee);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -27,9 +27,9 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
 
 
 
-        public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO entity)
+        public async Task<EmployeeDTO> AddEmployeeAsync(EmployeeDTO employee)
         {
-            var response = await _httpClient.PostAsJsonAsync("/api/Employee/AddEmployee", entity);
+            var response = await _httpClient.PostAsJsonAsync("/api/Employee/AddEmployee", employee);
 
             if (!response.IsSuccessStatusCode)
             {
@@ -78,7 +78,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
         public async Task<EmployeeDTO> GetEmployeeByIdAsync(int id)
         {
             var response = await _httpClient.GetAsync($"/api/Employee/Employee/{id}");
-            response.EnsureSuccessStatusCode(); // Check for HTTP errors
+            response.EnsureSuccessStatusCode();
 
             var responseContent = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
@@ -90,9 +90,9 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
             return result;
         }
 
-        public async Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO entity)
+        public async Task<EmployeeDTO> UpdateEmployeeAsync(EmployeeDTO employee)    
         {
-            var response = await _httpClient.PutAsJsonAsync("/api/Employee/UpdateEmployee", entity);
+            var response = await _httpClient.PutAsJsonAsync("/api/Employee/UpdateEmployee", employee);
             if (!response.IsSuccessStatusCode)
             {
                 throw new HttpResponseExeption(await response.Content.ReadAsStringAsync(), response.StatusCode);
