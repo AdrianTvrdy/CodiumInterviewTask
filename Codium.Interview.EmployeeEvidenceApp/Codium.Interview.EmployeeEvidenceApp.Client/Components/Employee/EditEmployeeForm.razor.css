@@ -1,1 +1,11 @@
-﻿
+﻿.btn-add {
+    margin-top: 10px;
+    top: 65px;
+    right: 60px;
+    font-size: 1rem; /* Increase font size */
+    padding: 0rem 2rem; /* Increase padding */
+    border-radius: 6px; /* Make it circular */
+    background-color: #1b6ec2;
+    border-color: #1b6ec2;
+    color: white;
+}

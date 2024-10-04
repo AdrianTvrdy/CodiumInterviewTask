@@ -17,12 +17,12 @@ namespace Codium.Interview.EmployeeEvidenceApp.Client.Repositories
 
         public async Task<PositionDTO> AddPositionAsync(PositionDTO position)
         {
-            var response = _httpClient.PostAsJsonAsync("/api/Position/AddPosition", position);
-            if (!response.Result.IsSuccessStatusCode)
+            var response = await _httpClient.PostAsJsonAsync("/api/Position/AddPosition", position);
+            if (!response.IsSuccessStatusCode)
             {
-                throw new HttpResponseExeption(response.Result.Content.ReadAsStringAsync().Result, response.Result.StatusCode);
+                throw new HttpResponseExeption(await response.Content.ReadAsStringAsync(), response.StatusCode);
             }
-            var responseContent = response.Result.Content.ReadAsStringAsync().Result;
+            var responseContent = await response.Content.ReadAsStringAsync();
             var options = new JsonSerializerOptions
             {
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
