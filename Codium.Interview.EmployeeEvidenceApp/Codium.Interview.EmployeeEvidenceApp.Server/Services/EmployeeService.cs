@@ -38,7 +38,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
             }
             else
             {
-                employee.IPCountryCode = await CountryCodeApi.GetCountryCodeFromIP(employee.IPaddress);
+                employee.IPCountryCode = await CountryCodeAPI.GetCountryCodeFromIP(employee.IPaddress);
             }
 
             return await _employeeRepository.AddEmployeeAsync(employee);
@@ -62,12 +62,24 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
                     
                     try
                     {
-                        newEmployee.IPCountryCode = await CountryCodeApi.GetCountryCodeFromIP(newEmployee.IPaddress);
+                        newEmployee.IPCountryCode = await CountryCodeAPI.GetCountryCodeFromIP(newEmployee.IPaddress);
+                    }
+                    catch (IPLocationNotFoundExeption)
+                    {
+                        result.Skipped++;
+                        result.Reasons.Add($"Employee {employee.Name} {employee.Surname} {employee.BirthDate} skipped upload skipped because IP was not correct");
+                        continue;
                     }
                     catch (ExternalAPINotWorkingException)
                     {
                         result.Skipped++;
                         result.Reasons.Add($"Employee {employee.Name} {employee.Surname} {employee.BirthDate} skipped upload skipped because IP was not correct");
+                        continue;
+                    }
+                    catch (Exception ex)
+                    {
+                        result.Skipped++;
+                        result.Reasons.Add($"Employee {employee.Name} {employee.Surname} {employee.BirthDate} skipped upload skipped because of {ex.Message}");
                         continue;
                     }
 
@@ -143,7 +155,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Services
 
                 if (entity.IPaddress != entityCheck.IPaddress)
                 {
-                    entity.IPCountryCode = await CountryCodeApi.GetCountryCodeFromIP(entity.IPaddress);
+                    entity.IPCountryCode = await CountryCodeAPI.GetCountryCodeFromIP(entity.IPaddress);
                 }
 
 

@@ -83,6 +83,11 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
                 _logger.LogWarning("Employee already exists.");
                 return BadRequest("Employee already exists!");
             }
+            catch (IPLocationNotFoundExeption ex)
+            {
+                _logger.LogWarning("Incorrect IP address (couldnt find a location).");
+                return BadRequest("Incorrect IP address (couldnt find a location)!");
+            }
             catch (ExternalAPINotWorkingException ex )
             {
                 _logger.LogError(ex, "External API not working.");
@@ -132,6 +137,11 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Controllers
             {
                 _logger.LogWarning(ex, "Employee not found.");
                 return NotFound("Employee not found!");
+            }
+            catch (IPLocationNotFoundExeption ex)
+            {
+                _logger.LogWarning("Incorrect IP address (couldnt find a location).");
+                return BadRequest("Incorrect IP address (couldnt find a location)!");
             }
             catch (ExternalAPINotWorkingException ex)
             {

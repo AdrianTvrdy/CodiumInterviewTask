@@ -1,4 +1,5 @@
 ﻿using Codium.Interview.EmployeeEvidenceApp.Shared.Models.Exceptions;
+using System.Net;
 using System.Text.Json;
 
 namespace Codium.Interview.EmployeeEvidenceApp.Server.Helpers
@@ -6,7 +7,7 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Helpers
     /// <summary>
     /// Helper static class to get the country code from an IP address
     /// </summary>
-    public static class CountryCodeApi
+    public static class CountryCodeAPI
     {
         /// <summary>
         /// Static method to get the country code from an IP address from the external API
@@ -22,7 +23,17 @@ namespace Codium.Interview.EmployeeEvidenceApp.Server.Helpers
 
             if (!response.IsSuccessStatusCode)
             {
-                throw new ExternalAPINotWorkingException();
+                if (response.StatusCode == HttpStatusCode.NotFound)
+                {
+                    // wrong ip
+                    throw new IPLocationNotFoundExeption();
+                }
+                else
+                {
+                    // external api not working
+                    throw new ExternalAPINotWorkingException();
+                }
+
             }
 
             var apiCallContent = await response.Content.ReadAsStringAsync();
